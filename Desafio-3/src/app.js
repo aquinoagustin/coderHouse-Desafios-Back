@@ -15,11 +15,11 @@ const manager = new ProductManager();
         try {
             let {limit} = req.query;
             const products = await manager.getProducts();
-            if(isNaN (limit) || limit == "" || limit < 0){
+            if(isNaN (limit) || limit == "" || limit < 0 || limit > products.length){
                 return res.send({products})
             }
-            const misProducts = products.slice(0,limit)
-            return res.send({misProducts})  
+            const productsFiltrados = products.slice(0,limit)
+            return res.send({productsFiltrados})  
 
         } catch (error) {
             console.log(error)
