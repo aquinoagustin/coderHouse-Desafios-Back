@@ -1,8 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import __dirname from '../utils.js'
-import {ProductManagerFile} from '../managers/ProductMangerFile.js';
-const productManagerFile = new ProductManagerFile(path);
+
 class CartManagerFile{
     constructor(pathFile){
         this.path = path.join(__dirname,`/files/${pathFile}`)
@@ -72,8 +71,6 @@ class CartManagerFile{
     addCartAndProduct = async (cid,ppid) => {
         try{
             const id = parseInt(cid);
-            const prodExist = await productManagerFile.getProductId(ppid); 
-            if(prodExist){
                 const carts = await this.getCarts();
                 let cartIndex = carts.findIndex(item => item.id == id);
                 let cartFind = carts.find(item => item.id == id);
@@ -90,8 +87,6 @@ class CartManagerFile{
                     return {msg:'added to cart',carts}
                 }
                 return 'cart not found'
-            }
-            return 'product not found'
         }catch(err){
             console.log(err)
         }
@@ -99,4 +94,3 @@ class CartManagerFile{
 }
 
 export {CartManagerFile};
-

@@ -31,13 +31,12 @@ class ProductManagerFile{
 
     getProductId = async(id) =>{
         try {
-            const products = await this.getProducts();
-            const productFind = products.find(prod => {
-                return prod.id == id
-            })
+            const products = await this.getProducts()
+
+            const productFind = products.find(item => item.id == id);
         
             if(!productFind){
-                return false
+                return productFind 
                 
             }
             return productFind
@@ -47,8 +46,6 @@ class ProductManagerFile{
         }
 
     }
-
-
     createProduct = async (product) => {
         try {
             if( this.validarCampos(product.title) && this.validarCampos(product.description) && this.validarNumero(product.price) && 
@@ -65,7 +62,7 @@ class ProductManagerFile{
                 await fs.promises.writeFile(this.path, JSON.stringify(products,null,'\t'))
                 return products
             }
-            return 'invalid field';
+            return false;
         } catch (error) {
             console.log(error)
         }
@@ -87,10 +84,10 @@ class ProductManagerFile{
                      await fs.promises.writeFile( this.path, JSON.stringify(prods, null, '\t') );
                      return productActualizado
                  }else{
-                     return 'Not found'
+                     return -1
                  }
              }
-             return 'invalid field'
+             return -2
         }catch(err){
             console.log(err)
         }
@@ -105,9 +102,9 @@ class ProductManagerFile{
             if(findProduct){
                 const productFiltrados = prods.filter(item=>item.id!= id)
                 await fs.promises.writeFile(this.path,JSON.stringify(productFiltrados,null,'\t'))
-                return 'Remove product'
+                return prods
             }else{
-                return 'Product not found'
+                return false
             }  
         } catch (err) {
             console.log(err)
