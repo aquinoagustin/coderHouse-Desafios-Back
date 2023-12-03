@@ -20,7 +20,7 @@ Consigna
 - stock (número de piezas disponibles)
 
 
-- Aspectos a incluir
+Aspectos a incluir
 
 - Debe tener un método addProduct el cual debe recibir un objeto con el formato previamente especificado, asignarle un id autoincrementable y guardarlo en el arreglo (recuerda siempre guardarlo como un array en el archivo).
 - Debe tener un método getProducts, el cual debe leer el archivo de productos y devolver todos los productos en formato de arreglo.
