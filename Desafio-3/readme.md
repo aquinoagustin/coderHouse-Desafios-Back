@@ -3,8 +3,11 @@ DESAFÍO ENTREGABLE
 Servidor con express
 
 Consigna
-Desarrollar un servidor basado en express donde podamos hacer consultas a nuestro archivo de productos.
-- Aspectos a incluir
+- Desarrollar un servidor basado en express donde podamos hacer consultas a nuestro archivo de productos.
+ 
+ 
+ Aspectos a incluir
+
 
 - Se deberá utilizar la clase ProductManager que actualmente utilizamos con persistencia de archivos. 
 - Desarrollar un servidor express que, en su archivo app.js importe al archivo de ProductManager que actualmente tenemos.
@@ -22,7 +25,9 @@ Desarrollar un servidor basado en express donde podamos hacer consultas a nuestr
 - NO INCLUIR LOS node_modules generados.
 
 - ruta ‘/products/:pid’, la cual debe recibir por req.params el pid (product Id), y devolver sólo el producto solicitado, en lugar de todos los productos. 
-- Sugerencias
+
+ Sugerencias
+
 - Tu clase lee archivos con promesas. recuerda usar async/await en tus endpoints
 - Utiliza un archivo que ya tenga productos, pues el desafío sólo es para gets. 
 
