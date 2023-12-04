@@ -70,7 +70,8 @@
 		"code": "abc123",
 		"stock": 25,
 		"id": 7
-	},	{
+	},
+	{
 		"title": "Mother",
 		"description": "Este es un producto prueba",
 		"price": 79,
@@ -78,7 +79,8 @@
 		"code": "abc123",
 		"stock": 30,
 		"id": 8
-	},	{
+	},
+	{
 		"title": "HDD",
 		"description": "Este es un producto prueba",
 		"price": 580,

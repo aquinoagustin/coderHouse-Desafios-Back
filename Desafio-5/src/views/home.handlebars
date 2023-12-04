@@ -1,8 +1,19 @@
 <div>
-    <h1>Usuarios</h1>
-    <ul>
-        {{#each prods}}
-        <li><strong>Name:</strong> {{title}} </li>
-        {{/each}}
-    </ul>
+        
+ <div id="list-prods" style="display:flex;flex-wrap:wrap">
+    {{#each prods}}
+        <div class="card col-sm-2 m-3" style="width:18rem">
+            <img src="https://www.bicifan.uy/wp-content/uploads/2016/09/producto-sin-imagen.png" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title" id="card-h5">{{title}}</h5>
+                <h4 class="card-title">US$ ${{price}}</h4>
+                <p class="card-text">Description:${{description}}</p>
+                <p class="card-text">Quantity: ${{stock}}</p>
+            </div>
+        </div>
+    {{/each}}
+    <div/>
+
+            
+        
 </div>

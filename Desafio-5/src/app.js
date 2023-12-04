@@ -1,10 +1,14 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
 import __dirname from './utils.js';
+
 import { cartRouter } from './routes/carts.routes.js';
 import { productRouter } from './routes/products.routes.js';
+import {homeRouter} from './routes/home.route.js';
+import {realtimeproductsRouter} from './routes/realtimeproducts.route.js';
+
 import { ProductManagerFile } from './managers/ProductMangerFile.js';
-import users from './users.js';
+
 import {Server} from 'socket.io';
 const path = 'products.json';
 const productManagerFile = new ProductManagerFile(path);
@@ -31,58 +35,35 @@ app.set('view engine','handlebars')
 
 
 
-app.get('/',async (req,res)=>{
-    const prods = await productManagerFile.getProducts();
-    res.render('home',{prods})
-})
 
-app.get('/realtimeproducts',async (req,res)=>{
-    const prods = await productManagerFile.getProducts();
-    res.render('realtimeproducts',{prods})
-})
 
 
 //Rutas
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
-
+app.use("/",homeRouter)
+app.use("/realtimeproducts",realtimeproductsRouter)
 
 
 //Socket
 socketServer.on('connection',async(socket) =>{
+    // Llamamos a los productos de nuestro json
     const prods = await productManagerFile.getProducts();
 
-
-    console.log('Nuevo cliente conectado');
-    
+    // Mostramos el mensaje en el sv que nos llega desde el front
     socket.on('message',data =>{
         console.log(data);
     }) 
 
- 
-    socket.emit('evento_para_mi','evento solo para el que se conecto')
-    socket.broadcast.emit('evento_no_para_mi','Hola, soy un nuevo participante')
-    socketServer.emit('evento_para_todos',prods)
 
-    /*
-    socket.on('input-message',(data)=>{
-          socketServer.emit('input-message',prods)
-       // socketServer.emit('input-message',data)
-    })*/
+    // Pasamos los prods al front a traves de socket
+    socketServer.emit('e_prods',prods)
+
+
+  
 
 
 
-/*
 
-    socket.on('chat-message',(data)=>{
-        const newMessage = {
-            socketId:socket.id,
-            message:data
-        }
-        messages = [...messages,newMessage];
-        socketServer.emit('chat-messages-update',messages)
-
-    })
-*/
 
 })

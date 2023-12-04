@@ -2,66 +2,45 @@
 
 const socket = io();
 
-socket.emit('message','Msg desde el front')
-
-
-socket.on('evento_solo_para_mi',(data)=>console.log(data))
-socket.on('evento_no_para_mi',(data)=>console.log(data))
-
-const chatInput = document.getElementById('chat-input');
-
-
-/*
-chatInput.addEventListener('input',(event)=>{
-    socket.emit('input-message',event.target.value)
-})*/
- 
-/*
-const inputMessage = document.getElementById('input-message')
-socket.on('input-message',(data)=>{
-    inputMessage.innerText = data;
-})
-*/
+socket.emit('message','cliente conectado')
 
 
 
-// TAREA
+const listProds = document.getElementById('list-prods');
 
-const inputMessage = document.getElementById('input-message')
+socket.on('e_prods',(data)=>{
+    listProds.innerHTML = ''
 
-const chatMessages = document.getElementById('chat-messages');
 
-socket.on('evento_para_todos',(data)=>{
-        chatMessages.innerHTML = ''
+
+
         data.map((item)=>{
+
+            listProds.innerHTML += `
+            <div class="card col-sm-2 m-3" style="width:18rem">
+                <img src="https://www.bicifan.uy/wp-content/uploads/2016/09/producto-sin-imagen.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title" id="card-h5">${item.title}</h5>
+                <h4 class="card-title">US$ ${item.price}</h4>
+                <p class="card-text">Description:${item.description}</p>
+                <p class="card-text">Quantity: ${item.stock}</p>
+
+                </div>
+            </div>
+            `
+
+
+
+/*
+
+            const div = document.createElement('div');
             const li = document.createElement('li');
+            div.innerText = ``
             li.innerText = `${item.id}:${item.title} US$ ${item.price}`
-            chatMessages.appendChild(li)
-        }
+            listProds.appendChild(li)
+            */
+            }
         )
     
 })
 
-
-
-
-
-
-
-/*
-const sendButton = document.getElementById('send-button')
-sendButton.addEventListener('click',(event)=>{
-    socket.emit('chat-message',chatInput.value);
-})
-
-
-socket.on('chat-messages-update',(data)=>{
-    chatMessages.innerHTML = '';
-    for(const el of data){
-        const li = document.createElement('li');
-        li.innerText = `${el.socketId}:${el.message}`
-        chatMessages.appendChild(li)
-    }
-})
-
-*/
