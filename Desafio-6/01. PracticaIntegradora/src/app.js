@@ -10,7 +10,7 @@ import viewRoutes from "./routes/views.router.js";
 const PORT = 8080;
 const app = express();
 
-const MONGO = "mongodb+srv://"
+const MONGO = "mongodb+srv://admin:admin@cluster0.vk2depo.mongodb.net/CoderPractica"
 
 const connection = mongoose.connect(MONGO);
 

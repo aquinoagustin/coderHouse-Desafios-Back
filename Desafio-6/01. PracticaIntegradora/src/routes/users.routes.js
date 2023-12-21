@@ -19,11 +19,8 @@ router.get("/:uid", async (req,res)=>{
     const id = req.params.uid;
 
     const user = await userModel.find({_id:id})
-    
-    res.send({
-        status: "success",
-        message: user
-    })
+    console.log('asoidjaoidjsaiojio',user)
+
 })
 
 router.post("/", uploader.single("thumbnail") ,async (req,res)=>{
