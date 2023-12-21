@@ -1,0 +1,92 @@
+[
+	{
+		"title": "Keyboard",
+		"description": "Este es un producto prueba",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"code": "abc123",
+		"stock": 48,
+		"id": 0
+	},
+	{
+		"title": "Mouse",
+		"description": "Este es un producto prueba",
+		"price": 300,
+		"thumbnail": "Sin imagen",
+		"code": "abc123",
+		"stock": 28,
+		"id": 1
+	},
+	{
+		"title": "printer",
+		"description": "Este es un producto prueba",
+		"price": 50,
+		"thumbnail": "Sin imagen",
+		"code": "abc123",
+		"stock": 6,
+		"id": 2
+	},
+	{
+		"title": "monitor",
+		"description": "Este es un producto prueba",
+		"price": 500,
+		"thumbnail": "Sin imagen",
+		"code": "abc123",
+		"stock": 1,
+		"id": 3
+	},
+	{
+		"title": "pendrive",
+		"description": "Este es un producto prueba",
+		"price": 30,
+		"thumbnail": "Sin imagen",
+		"code": "abc123",
+		"stock": 2,
+		"id": 4
+	},
+	{
+		"title": "CD",
+		"description": "Este es un producto prueba",
+		"price": 999,
+		"thumbnail": "Sin imagen",
+		"code": "abc123",
+		"stock": 29,
+		"id": 5
+	},
+	{
+		"title": "DVD",
+		"description": "Este es un producto prueba",
+		"price": 10,
+		"thumbnail": "Sin imagen",
+		"code": "abc123",
+		"stock": 40,
+		"id": 6
+	},
+	{
+		"title": "Notebook",
+		"description": "Este es un producto prueba",
+		"price": 600,
+		"thumbnail": "Sin imagen",
+		"code": "abc123",
+		"stock": 25,
+		"id": 7
+	},
+	{
+		"title": "Mother",
+		"description": "Este es un producto prueba",
+		"price": 79,
+		"thumbnail": "Sin imagen",
+		"code": "abc123",
+		"stock": 30,
+		"id": 8
+	},
+	{
+		"title": "HDD",
+		"description": "Este es un producto prueba",
+		"price": 580,
+		"thumbnail": "Sin imagen",
+		"code": "abc123",
+		"stock": 2,
+		"id": 9
+	}
+]
