@@ -20,13 +20,11 @@ const cartManagerFile = new CartManagerFileDB(path);
 router.get("/:cid", async (req,res)=>{
 
 
-    const id = req.params.cid;
-    const carts = await cartModel.find({_id:id})
-    console.log(carts)
-    
+    const cid = req.params.cid;
+    const getCart = await cartManagerFile.getCart(cid);    
     res.send({
         status: "success",
-        message: carts
+        message: getCart
     })
 })
 

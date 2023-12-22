@@ -1,6 +1,4 @@
-
 import { Router } from "express";
-import productModel from "../dao/models/products.model.js";
 import { uploader } from "../utils.js";
 import {ProductManagerFileDB} from '../dao/managersDB/ProductMangerFile.js';
 
@@ -15,7 +13,7 @@ const productManagerFile = new ProductManagerFileDB(path);
 router.get("/", async (req,res)=>{
     let {limit} = req.query;
 
-    const product = await productModel.find()
+    const product = await productManagerFile.getProducts(limit);
     
     res.send({
         status: "success",
@@ -26,10 +24,8 @@ router.get("/", async (req,res)=>{
 
 router.get("/:pid", async (req,res)=>{
 
-    const id = req.params.pid;
-
-    const product = await productModel.find({_id:id})
-    
+      const id = req.params.pid;
+      const product = await productManagerFile.getProductId(id);
     res.send({
         status: "success",
         message: product
@@ -40,29 +36,17 @@ router.get("/:pid", async (req,res)=>{
 
 router.post("/", uploader.single("thumbnail") ,async (req,res)=>{
 
-    const { title,description,price,code,stock,status,category } = req.body;
-    
-  //  const filename = req.file.filename;
-
-
-    if(!title || !description || !price || !code || !stock || !status || !category ){
-        return res.status(400).send({
-            status: "error",
-            message: "Valores incompletos"
-        })
-    }
-    const product = {
-        title,
-        description,
-        price,
-        code,
-        stock,
-        status,
-        category
-    }
-
-    const result = await productModel.create(product);
-
+  const { title,description,price,code,stock,status,category } = req.body;
+  const product = {
+    title,
+    description,
+    price,
+    code,
+    stock,
+    status,
+    category
+}
+    const result = await productManagerFile.createProduct(product)
     res.send({
         status: "success",
         message: result
@@ -73,7 +57,7 @@ router.post("/", uploader.single("thumbnail") ,async (req,res)=>{
 
 router.put("/:pid", async (req,res)=>{
 
-    const id = req.params.pid;
+    const pid = req.params.pid;
 
     const { title,description,price,code,stock,status,category } = req.body;
     
@@ -88,7 +72,7 @@ router.put("/:pid", async (req,res)=>{
         category
     }
 
-    const result  = await productModel.updateOne({_id:id},{$set:updateuser});
+    const result  = await productManagerFile.updateProduct(pid,updateuser);
 
     res.send({
         status: "success",
@@ -101,8 +85,8 @@ router.put("/:pid", async (req,res)=>{
 
 router.delete("/:pid", async (req,res)=>{
 
-    const id = req.params.pid;
-    const result = await productModel.deleteOne({_id:id})
+    const pid = req.params.pid;
+    const result = await productManagerFile.deleteProduct(pid)
 
     res.send({
         status: "success",
