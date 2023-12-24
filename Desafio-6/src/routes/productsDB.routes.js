@@ -12,13 +12,9 @@ const productManagerFile = new ProductManagerFileDB(path);
 
 router.get("/", async (req,res)=>{
     let {limit} = req.query;
-
     const product = await productManagerFile.getProducts(limit);
+    res.send(product)
     
-    res.send({
-        status: "success",
-        message: product
-    })
 })
 
 
@@ -26,10 +22,7 @@ router.get("/:pid", async (req,res)=>{
 
       const id = req.params.pid;
       const product = await productManagerFile.getProductId(id);
-    res.send({
-        status: "success",
-        message: product
-    })
+      res.send(product)
 })
 
 
@@ -47,10 +40,7 @@ router.post("/", uploader.single("thumbnail") ,async (req,res)=>{
     category
 }
     const result = await productManagerFile.createProduct(product)
-    res.send({
-        status: "success",
-        message: result
-    })
+    res.send(result)
 })
 
 
@@ -73,11 +63,7 @@ router.put("/:pid", async (req,res)=>{
     }
 
     const result  = await productManagerFile.updateProduct(pid,updateuser);
-
-    res.send({
-        status: "success",
-        message: result
-    })
+    res.send(result);
 })
 
 
@@ -87,11 +73,7 @@ router.delete("/:pid", async (req,res)=>{
 
     const pid = req.params.pid;
     const result = await productManagerFile.deleteProduct(pid)
-
-    res.send({
-        status: "success",
-        message: result
-    })
+    res.send(result)
 })
 
 export {router as productRouterDB};

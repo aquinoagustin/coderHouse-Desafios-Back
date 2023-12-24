@@ -1,8 +1,6 @@
 
 import { Router } from "express";
-import productModel from "../dao/models/products.model.js";
 import { uploader } from "../utils.js";
-import cartModel from "../dao/models/carts.model.js";
 import { CartManagerFileDB } from "../dao/managersDB/CartManagerFile.js";
 
 
@@ -22,10 +20,7 @@ router.get("/:cid", async (req,res)=>{
 
     const cid = req.params.cid;
     const getCart = await cartManagerFile.getCart(cid);    
-    res.send({
-        status: "success",
-        message: getCart
-    })
+    res.send(getCart)
 })
 
 
@@ -37,8 +32,7 @@ router.post("/", uploader.single("thumbnail") ,async (req,res)=>{
 
     const cart = req.body;
     const carts = await cartManagerFile.addCart(cart);
-    if(carts === false)res.send({msg:'invalid field'})
-    res.send({status:"success",carts})
+    res.send(carts)
 })
 
 
@@ -46,14 +40,8 @@ router.post("/", uploader.single("thumbnail") ,async (req,res)=>{
 router.post("/:cid/product/:pid", async (req,res)=>{
     const cid = req.params.cid;
     const pid = req.params.pid;
-    const prodExist = await productModel.find({_id:pid})
-    if(prodExist){
-        const carts = await cartManagerFile.addCartAndProduct(cid,pid)
-        res.send(carts)
-    }
-
-
-
+    const carts = await cartManagerFile.addCartAndProduct(cid,pid)
+    res.send(carts)
 })
 
 

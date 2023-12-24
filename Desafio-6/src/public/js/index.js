@@ -1,46 +1,43 @@
-//Iniciar el Socket
-
+//Iniciar el Socket 
 const socket = io();
 
-socket.emit('message','cliente conectado')
+socket.emit("message", "Mensaje desde el Front");
 
-
-
-const listProds = document.getElementById('list-prods');
-
-socket.on('e_prods',(data)=>{
-    listProds.innerHTML = ''
-
-
-
-
-        data.map((item)=>{
-
-            listProds.innerHTML += `
-            <div class="card col-sm-2 m-3" style="width:18rem">
-                <img src="https://www.bicifan.uy/wp-content/uploads/2016/09/producto-sin-imagen.png" class="card-img-top" alt="...">
-                <div class="card-body">
-                <h5 class="card-title" id="card-h5">${item.title}</h5>
-                <h4 class="card-title">US$ ${item.price}</h4>
-                <p class="card-text">Description:${item.description}</p>
-                <p class="card-text">Quantity: ${item.stock}</p>
-
-                </div>
-            </div>
-            `
-
-
-
-/*
-
-            const div = document.createElement('div');
-            const li = document.createElement('li');
-            div.innerText = ``
-            li.innerText = `${item.id}:${item.title} US$ ${item.price}`
-            listProds.appendChild(li)
-            */
-            }
-        )
-    
+socket.on("evento_para_mi", (data)=>{
+    console.log(data);
 })
 
+socket.on("evento_no_para_mi", (data)=>{
+    console.log(data);
+})
+
+socket.on("evento_para_todos", (data)=>{
+    console.log(data);
+})
+
+const chatInput = document.getElementById("chat-input");
+/********** */
+chatInput.addEventListener("input", function(ev){
+    socket.emit("input-message", ev.target.value)
+})
+const inputMessage = document.getElementById("input-message");
+socket.on("input-message", (data)=>{
+    inputMessage.innerText = data;
+})
+/********** */
+
+const sendButton = document.getElementById("send-button");
+
+sendButton.addEventListener("click", function(ev){
+    socket.emit("chat-message", chatInput.value);
+})
+
+const chatMessages = document.getElementById("chat-messages");
+socket.on("chat-messages-update", (data)=>{
+    chatMessages.innerHTML = "";
+    for (const el of data) {
+        const li = document.createElement("li");
+        li.innerText = `${el.user}: ${el.message}`;
+        chatMessages.appendChild(li)
+    }
+})

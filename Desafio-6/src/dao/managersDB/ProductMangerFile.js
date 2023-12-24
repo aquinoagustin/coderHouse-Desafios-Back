@@ -8,13 +8,10 @@ class ProductManagerFileDB{
 
     getProducts = async (limit) => {
         try {
-                const products = productModel.find();
-                if(products){
-                    const productsFiltrados = products.find().limit(limit);
-                    return productsFiltrados 
-            }
-            else{
-                return [];
+            const products = await productModel.find().limit(limit);
+            return {
+                status:'success',
+                msg:products
             }
 
         } catch (error) {
@@ -25,12 +22,11 @@ class ProductManagerFileDB{
 
     getProductId = async(id) =>{
         try {
-            const products = productModel.find();
-            const productFind = products.find({_id:id})
-            if(!productFind){
-                return productFind 
+            const products = await productModel.findOne({_id:id});
+            return {
+                status:'success',
+                msg:products
             }
-            return productFind
 
         } catch (error) {
             console.log(error)
@@ -47,7 +43,10 @@ class ProductManagerFileDB{
          })
     }
     const result = await productModel.create(product); 
-    return result;  
+    return {
+        status:'success',
+        msg:result
+    }  
         } catch (error) {
             console.log(error)
         }
@@ -64,7 +63,10 @@ class ProductManagerFileDB{
          })
         }
     const result  = await productModel.updateOne({_id:pid},{$set:updateuser});
-    return result;
+    return {
+        status:'success',
+        msg:result
+    }
     }catch(err){
             console.log(err)
         }
@@ -74,7 +76,10 @@ class ProductManagerFileDB{
     deleteProduct = async (pid) => {
         try {
             const result = await productModel.deleteOne({_id:pid})
-            return result;
+            return {
+                status:'success',
+                msg:result
+            }
         } catch (err) {
             console.log(err)
         }
