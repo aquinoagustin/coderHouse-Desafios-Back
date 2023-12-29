@@ -1,0 +1,13 @@
+<div>
+     <div id="list-prods" style="display:flex;flex-wrap:wrap">
+    {{#each cart.products}}
+        <div class="card col-sm-2 m-3" style="width:18rem">
+            <img src="https://www.bicifan.uy/wp-content/uploads/2016/09/producto-sin-imagen.png" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title" id="card-h5">{{product._id}}</h5>
+                <button>Agregar al carrito</button>
+            </div>
+        </div>
+    {{/each}}
+    <div/>
+</div>

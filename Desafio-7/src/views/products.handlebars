@@ -1,0 +1,18 @@
+<div>
+        
+ <div id="list-prods" style="display:flex;flex-wrap:wrap">
+    {{#each products.docs}}
+        <div class="card col-sm-2 m-3" style="width:18rem">
+            <div class="card-body">
+                <h5 class="card-title" id="card-h5">{{title}}</h5>
+                <h4 class="card-title">US$ ${{price}}</h4>
+                <p class="card-text">Description:${{description}}</p>
+                <p class="card-text">Quantity: ${{stock}}</p>
+                <button>Agregar al carrito</button>
+            </div>
+        </div>
+    {{/each}}
+    <div/>
+            
+        
+</div>
