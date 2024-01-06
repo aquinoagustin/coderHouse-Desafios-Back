@@ -13,7 +13,7 @@ class CartManagerDB {
     }
     getCartByID = async (cid) => {
         try {
-            const cart = await cartsModel.find({_id:cid}).populate('products.product');
+            const cart = await cartsModel.find({_id:cid}).lean();
             return cart;
         } catch (error) {
             console.log(error)

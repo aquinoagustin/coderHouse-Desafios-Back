@@ -4,39 +4,35 @@ import { ProductManagerDB } from "../dao/dbManagers/ProductManagerDB.js";
 const router = Router();
 const productManagerDB = new ProductManagerDB();
 
-router.get('/', async (req,res)=>{
+router.get('/', async (req, res) => {
     try {
-
-        const {limit, page, sort, category} = req.query
-        const options = {
-            limit: limit ?? 10,
-            page: page ?? 1,
-            sort: { price: sort === "asc" ? 1 : -1},
-            lean: true,
-        }
-        const products = await productManagerDB.getProducts(options,category)
-/*
-        if(products.hasPrevPage){
-            products.prevPage = "---LINK---"
-        }
-        if(products.hasNextPage){
-            products.nextLink = "---LINK---"
-        }
-  */      
+        const { limit, page, sort, category, availability, query} = req.query
+        const products = await productManagerDB.getProducts(limit, page, sort, category, availability, query)
         res.send({
-            status:"success",
-            productos: products,
-        })
-
-
+            status: "success",
+            products: products
+        });
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        res.status(500).send({
+            status: 'error',
+            msg: 'Internal server error',
+        });
     }
-
-
-
-
-})
+});
+  
+  
+  router.post("/", async (req, res) => {
+    const newProduct = req.body;
+  
+    try {
+      const createdProduct = await productManager.addProduct(newProduct);
+      io.emit('realTimeProductsUpdate', { products: 'lista actualizada de productos' });
+      res.json(createdProduct);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 
 router.get('/:pid', async (req,res)=>{
     res.send({
