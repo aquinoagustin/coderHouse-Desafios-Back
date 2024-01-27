@@ -1,0 +1,4 @@
+COPIAR EL GITHUB DEL PROFESOR,
+refactorizar nuestro ultimo proyecto agregandole las uniones de modelos users.
+Usamos sessions, en nuestro ultimo proyecto, podemos seguir usandolo o usar jwt (opcional),
+El current lo vimos el martes pasado (revisar)
