@@ -17,16 +17,11 @@ const connection = mongoose.connect(MONGO);
 
 const PORT = 8080;
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-app.use(express.static(__dirname + '/public'));
 
 
 
-const httpServer = app.listen(PORT, ()=>{
-    console.log(`Servidor funcionando en el puerto: ${PORT}`);
-})
 
+/* Secret */
 app.use(session({
     store:new MongoStore({
         mongoUrl:MONGO,
@@ -37,19 +32,27 @@ app.use(session({
     saveUninitialized:false
 }))
 
+/* Passport */
+
 inicializePassport();
 app.use(passport.initialize());
 app.use(passport.session())
 
 
-//Handlebars
+/** Template engine */
 
-
-
-app.set('views','./src/views')
 app.engine('handlebars',handlebars.engine());
 app.set('views',__dirname + '/views');
 app.set('view engine','handlebars');
+
+
+
+/***Middlewares */
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use(express.static(__dirname + '/public'));
+
 
 
 //Rutas
@@ -58,3 +61,7 @@ app.use("/api/carts", cartRouter);
 app.use("/", viewsRouter)
 app.use('/api/sessions',sessionRouter);    
 
+
+const httpServer = app.listen(PORT, ()=>{
+    console.log(`Servidor funcionando en el puerto: ${PORT}`);
+})
