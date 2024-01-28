@@ -1,13 +1,13 @@
 import {Router} from "express";
-import { ProductManagerDB } from "../dao/dbManagers/ProductManagerDB.js";
+import ProductManagerDB  from "../dao/dbManagers/ProductManagerDB.js";
 
 const router = Router();
-const productManagerDB = new ProductManagerDB();
 
+const productService = new ProductManagerDB();
 router.get('/', async (req, res) => {
     try {
         const { limit, page, sort, category, availability, query} = req.query
-        const products = await productManagerDB.getProducts(limit, page, sort, category, availability, query)
+        const products = await productService.getAll(limit, page, sort, category, availability, query)
         res.send({
             status: "success",
             products: products
@@ -21,29 +21,10 @@ router.get('/', async (req, res) => {
     }
 });
   
-  
-  router.post("/", async (req, res) => {
-    const newProduct = req.body;
-  
-    try {
-      const createdProduct = await productManager.addProduct(newProduct);
-      io.emit('realTimeProductsUpdate', { products: 'lista actualizada de productos' });
-      res.json(createdProduct);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-router.get('/:pid', async (req,res)=>{
-    res.send({
-        status:"succes",
-        msg:"Ruta GET ID PRODUCTS"
-    })
-})
 router.post('/', async (req,res)=>{ //creo
 
     const product = req.body;//json con el producto
-    const products = await productManagerDB.createProduct(product);
+    const products = await productService.saveProduct(product);
 
     res.send({
         status:"succes",
@@ -51,17 +32,31 @@ router.post('/', async (req,res)=>{ //creo
         productos: products
     })
 })
+
+
+router.get('/:pid', async (req,res)=>{
+    const pid = req.params.pid;
+    const result = await productService.getBy({_id:pid});
+    res.send({
+        status:"success",
+        msg:`Product ${pid} `,
+        result
+    })
+})
 router.put('/:pid', async (req,res)=>{
     const pid = req.params.pid;
+    const prod = req.body;
+    const result = await productService.updateProduct(pid,prod)
     res.send({
-        status:"succes",
-        msg:`Ruta PUT de PRODUCTS con ID: ${pid}`
+        status:"success",
+        msg:`Ruta PUT de PRODUCTS con ID: ${pid}`,
+        result
     })
 })
 router.delete('/:pid', async (req,res)=>{
     const pid = req.params.pid;
     res.send({
-        status:"succes",
+        status:"success",
         msg:`Ruta DELETE de PRODUCTS con ID: ${pid}`
     })
 })

@@ -14,7 +14,15 @@ const cartSchema = new mongoose.Schema({
                 default: 1
             }
         }
-    ]
+    ],
+    users:{
+        type:[
+            {
+                type:String
+            }
+        ],
+        default:[]
+    }
 });
 
 cartSchema.pre("find", function(){

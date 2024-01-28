@@ -1,34 +1,37 @@
 import passport from "passport";
 import local from "passport-local";
-
-import userModel from "../dao/models/Users.model.js";
-import {createHash, validatePassword} from "../utils.js";
 import GitHubStrategy from 'passport-github2';
-
+import Users from "../dao/dbManagers/userManager.js";
+import {createHash, isValidPassword } from '../utils.js';
 
 const LocalStrategy = local.Strategy;
-
+const userService = new Users();
 const inicializePassport = () => {
 
     passport.use("register", new LocalStrategy(
-        {passReqToCallback:true, usernameField:"email"},
+        {passReqToCallback:true, usernameField:"email",session:false},
         async ( req, username, password, done ) => {
-        const { first_name, last_name, email, age } = req.body;
-        try {
-            
-            let user = await userModel.findOne({email:username});
+            try {
+            const { first_name, last_name,birthDate,dni,gender,email,age } = req.body;
+            if(!first_name || !last_name || !dni){
+                return done(null,false,{message:"Valores incompletos."})
+            } 
+            const user = await userService.getBy({email:username});  
             if(user){
-                console.log('Usuario ya registrado');
-                return done(null,false)
+                return done(null,false,{message:"El usuario ya existe."})
             }
+            const hashedPassword = await createHash(password);
             const newUser = {
                 first_name,
                 last_name,
                 email,
                 age,
-                password: createHash(password)
+                password: hashedPassword,
+                dni,
+                birthDate,
+                gender
             }
-            const result = await userModel.create(newUser);
+           const result = await userService.saveUser(newUser);
             return done (null, result);
 
         } catch (error) {
@@ -37,33 +40,35 @@ const inicializePassport = () => {
 
     }));
 
-
-    passport.use("login", new LocalStrategy(
-    {usernameField:"email"},
+    passport.use("login", new LocalStrategy({usernameField:"email", session:false},
     async (username, password, done)=>{
         try {
-            const user = await userModel.findOne({email:username})
+            const user = await userService.getBy({email:username});
             if(!user){
-                return done(null, false);
-            }
-            if(!validatePassword(password, user)){
-                return done(null, false);
-            } 
-            return done(null,user)
+                return done(null,false,{message:"El usuario no existe."})
+            };
+            
+            const passwordValidation = await isValidPassword(user,password);
+            if(!passwordValidation){
+                return done(null,false,{message:"Password incorrecto."})
+            };
+            
+                    
+        return done(null,user);
+            
         } catch (error) {
             return done(error);
         }
     }))
 
     passport.serializeUser((user,done)=>{
-        done(null, user._id)
-    });
+        done(null,user._id);
+       })
 
-    passport.deserializeUser(async (id,done)=>{
-        let user = await userModel.findById(id);
-        done(null, user);
-    });
-    
+    passport.deserializeUser(async(id,done)=>{
+        let result = await userService.getBy({_id:id});
+        return done(null,result)
+       })
 
 passport.use('github', new GitHubStrategy({
     clientID: "Iv1.dbc20d5b00901030",
@@ -77,7 +82,7 @@ passport.use('github', new GitHubStrategy({
         if(!profile._json.email){
             profile.username;
         }
-        let user = await userModel.findOne({email:profile._json.email});
+        let user = await userService.getBy({email:profile._json.email});
         if(user){
             console.log('Usuario ya registrado');
             return done(null,false)
@@ -90,7 +95,7 @@ passport.use('github', new GitHubStrategy({
             age: 18,
             password: ""
         }
-        const result = await userModel.create(newUser);
+        const result = await userService.saveUser(newUser);
         return done (null, result);
 
     } catch (error) {

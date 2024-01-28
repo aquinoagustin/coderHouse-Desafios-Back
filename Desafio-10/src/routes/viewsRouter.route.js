@@ -1,8 +1,10 @@
 import {Router} from 'express';
-import { ProductManagerDB } from '../dao/dbManagers/ProductManagerDB.js';
-import cartsModel from '../dao/models/cart.models.js';
+import ProductManagerDB  from '../dao/dbManagers/ProductManagerDB.js';
+import CartManagerDB from '../dao/dbManagers/CartManagerDB.js';
 
-const productManagerDB = new ProductManagerDB;
+
+const productService = new ProductManagerDB();
+const cartService = new CartManagerDB();
 
 const router = Router();
 
@@ -22,7 +24,7 @@ const privateAccess = (req,res,next) =>{
 
 router.get('/products',privateAccess ,async (req, res) => {
     const { limit, page, sort, category, availability, query} = req.query
-    const products = await productManagerDB.getProducts(limit, page, sort, category, availability, query);
+    const products = await productService.getAll(limit, page, sort, category, availability, query);
     res.render('products',{products: products.msg.docs,user:req.session.user});
 });
 
@@ -30,7 +32,7 @@ router.get('/products',privateAccess ,async (req, res) => {
 
 router.get('/cart/:cid',async(req,res)=>{
     const cid = req.params.cid;
-    const cart = await cartsModel.findOne({_id:cid}).lean()
+    const cart = await cartService.getBy({_id:cid}).lean()
     res.render('cart',{cart}) 
  })
  

@@ -1,44 +1,41 @@
 import cartsModel from "../models/cart.models.js";
-import productsModel from "../models/products.models.js";
+import ProductManagerDB from './ProductManagerDB.js';
+const productService = new ProductManagerDB();
+export default class CartManagerDB {
 
-class CartManagerDB {
-
-    getCarts = async () => {
-        try {
-            const carts = await cartsModel.find().populate('products.product');
-            return carts;   
-        } catch (error) {
-            console.log(error)
-        }
+    getAll = async () => {
+        const carts = await cartsModel.find().populate('products.product');
+        return carts;
     }
-    getCartByID = async (cid) => {
-        try {
-            const cart = await cartsModel.find({_id:cid}).lean();
-            return cart;
-        } catch (error) {
-            console.log(error)
-        }
 
-    }
-    createCart = async () => {
-        try {
-            const cart = await cartsModel.create({});
-            return cart;  
-        } catch (error) {
-            console.log(error)
-        }
 
+    getBy = async (params) => {
+        let result = await cartsModel.findOne(params);
+        return result;
     }
-    addProductInCart = async (cid, pid, quantity = 1) => {
+
+
+    saveCart = async () => {
+        let result = await cartsModel.create({});
+        return result;
+    }
+
+
+
+
+    addProductInCart = async (cid, pid, quantity) => {
         try {
-            const cart = await cartsModel.findOne({_id:cid});
+            if(quantity === undefined){
+                quantity = 1;
+            }
+            const cart = await this.getBy({_id:cid});
             if (!cart){
                 return {
                     status: "error",
                     msg: `El carrito con el id ${cid} no existe`
                 } 
             };
-            const product = await productsModel.findOne({_id:pid});
+            const product = await productService.getBy({_id:pid});
             if (!product){
                 return {
                     status: "error",
@@ -70,14 +67,14 @@ class CartManagerDB {
     }
     deleteProductCart = async (cid,pid) => {
         try {
-            const cart = await cartsModel.findOne({_id:cid});
+            const cart = await this.getBy({_id:cid});
         if (!cart){
             return {
                 status: "error",
                 msg: `El carrito con el id ${cid} no existe`
             } 
         };
-        const product = await productsModel.findOne({_id:pid});
+        const product = await productService.getBy({_id:pid});
         if (!product){
             return {
                 status: "error",
@@ -105,7 +102,7 @@ class CartManagerDB {
 
     deleteProductCartAll = async (cid) => {
         try {
-            const cart = await cartsModel.findOne({_id:cid});
+            const cart = await this.getBy({_id:cid});
             if (!cart){
                 return {
                     status: "error",
@@ -123,7 +120,7 @@ class CartManagerDB {
     }
     async editCart(cid, updatedProducts) {
         try {
-          const cart = await cartsModel.findOne({ _id: cid })
+          const cart = await this.getBy({_id:cid});
           if (!cart) {
             return{
                 status: "error",
@@ -141,14 +138,14 @@ class CartManagerDB {
 
     editProductCartQuantity = async(cid,pid,quantity) => {
         try {
-            const cart = await cartsModel.findOne({_id:cid});
+            const cart = await this.getBy({_id:cid});
             if (!cart){
                 return {
                     status: "error",
                     msg: `El carrito con el id ${cid} no existe`
                 } 
             };
-            const product = await productsModel.findOne({_id:pid});
+            const product = await productService.getBy({_id:pid});
             if (!product){
                 return {
                     status: "error",
@@ -180,4 +177,3 @@ class CartManagerDB {
     }
 }
 
-export {CartManagerDB};

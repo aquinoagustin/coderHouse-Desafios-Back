@@ -1,12 +1,9 @@
-import userModel from "../models/users.js";
+import userModel from "../models/Users.model.js";
 
 
 export default class Users {
-    constructor(){
-        console.log('Funciona el DBManager');
-    }
     getAll = async () => {
-        let users = await userModel.find().lean();
+        let users = await userModel.find().lean().populate('cart');
         return users;
     }
     saveUser = async (user) => {
@@ -14,7 +11,7 @@ export default class Users {
         return result;
     }
     getBy = async (params) => {
-        let result = await userModel.findOne(params).lean();
+        let result = await userModel.findOne(params).populate('cart');
         return result;
     }
     updateUser = async (id,user) => {

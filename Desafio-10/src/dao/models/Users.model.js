@@ -7,7 +7,21 @@ import mongoose from "mongoose";
     last_name:String,
     email:String,
     age:Number,
-    password:String
+    password:String,
+    cart:{
+      type:[
+          {
+              type:mongoose.SchemaTypes.ObjectId,
+              ref:'cart'
+          }
+      ],
+      default:[]
+  },
+    rol:{
+      type:String,
+      enum:["user","admin"],
+      default:"user"
+  },
  })
 
  const userModel = mongoose.model(collection,schema);

@@ -1,19 +1,15 @@
 import productsModel from "../models/products.models.js";
 
-class ProductManagerDB {
-  createProduct = async (prod) => {
-    try {
-      const product = await productsModel.create(prod);
-      return {
-        status: "success",
-        msg: product,
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export default class ProductManagerDB {
 
-  getProducts = async (limit, page, sort, category, availability, query) => {
+
+  saveProduct = async (prod) => {
+    let result = await productsModel.create(prod);
+    return result;
+}
+
+
+  getAll = async (limit, page, sort, category, availability, query) => {
     const filter = {};
     if (category) {
         filter.category = category;
@@ -63,18 +59,16 @@ class ProductManagerDB {
     }
 };
 
-
-  getProductByID = async (pid) => {
-    try {
-      const product = await productsModel.findOne({ _id_id });
-      return {
-        status: "success",
-        msg: product,
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  };
+getBy = async (params) => {
+  let result = await productsModel.findOne(params);
+  return result;
 }
 
-export { ProductManagerDB };
+updateProduct = async (id,prod) => {
+    delete prod._id;
+    let result = await productsModel.updateOne({_id:id},{$set:prod})
+    return result
+}
+
+}
+
