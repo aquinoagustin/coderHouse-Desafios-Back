@@ -36,7 +36,6 @@ router.post('/login',passport.authenticate('login',{failureRedirect:'/api/sessio
       last_name:req.user.last_name,
       age:req.user.age,
       email:req.user.email,
-      dni:req.user.dni
     }
     res.send({status:'success',payload:req.user})
   }

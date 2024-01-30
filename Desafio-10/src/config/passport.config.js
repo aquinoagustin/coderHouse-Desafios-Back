@@ -12,8 +12,8 @@ const inicializePassport = () => {
         {passReqToCallback:true, usernameField:"email",session:false},
         async ( req, username, password, done ) => {
             try {
-            const { first_name, last_name,birthDate,dni,gender,email,age } = req.body;
-            if(!first_name || !last_name || !dni){
+            const { first_name, last_name,email,age } = req.body;
+            if(!first_name || !last_name){
                 return done(null,false,{message:"Valores incompletos."})
             } 
             const user = await userService.getBy({email:username});  
@@ -27,9 +27,6 @@ const inicializePassport = () => {
                 email,
                 age,
                 password: hashedPassword,
-                dni,
-                birthDate,
-                gender
             }
            const result = await userService.saveUser(newUser);
             return done (null, result);

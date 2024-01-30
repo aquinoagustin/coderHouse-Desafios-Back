@@ -1,5 +1,5 @@
 import userModel from "../models/Users.model.js";
-
+import CartManagerDB from './CartManagerDB.js';
 
 export default class Users {
     getAll = async () => {
@@ -7,6 +7,8 @@ export default class Users {
         return users;
     }
     saveUser = async (user) => {
+        const cart = await CartManagerDB.saveCart();
+        user.cart = cart;
         let result = await userModel.create(user);
         return result;
     }
