@@ -1,7 +1,7 @@
 import userModel from "../models/Users.model.js";
-import CartManagerDB from './CartManagerDB.js';
+import {CartManagerDB} from './CartManagerDB.js';
 
-export default class Users {
+export class Users {
     getAll = async () => {
         let users = await userModel.find().lean().populate('cart');
         return users;

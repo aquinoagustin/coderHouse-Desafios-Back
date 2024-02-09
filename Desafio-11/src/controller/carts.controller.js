@@ -1,9 +1,9 @@
-import {CartService} from '../service/CartManagerDB.service.js';
+import {cartsDao} from '../dao/index.js';
 
 
 class CartController{
     static getCart = async (req,res)=>{
-        const carts = await CartService.getAll();
+        const carts = await cartsDao.getAll();
         res.send({
             status:"succes",
             carritos: carts
@@ -11,14 +11,14 @@ class CartController{
     }
     static getBy = async (req,res)=>{
         const cid = req.params.cid;
-        const cart = await CartService.getBy({_id:cid})
+        const cart = await cartsDao.getBy({_id:cid})
         res.send({
             status:"succes",
             msg:cart
         })
     }
     static saveCart = async (req,res)=>{
-        const cart = await CartService.saveCart()
+        const cart = await cartsDao.saveCart()
         res.send({
             status:"succes",
             msg: cart
@@ -28,7 +28,7 @@ class CartController{
         const cid = req.params.cid;
         const pid = req.params.pid;
         const quantity = req.body.quantity
-        const carts = await CartService.addProductInCart(cid,pid,quantity)
+        const carts = await cartsDao.addProductInCart(cid,pid,quantity)
         res.send({
             carts
         })
@@ -36,7 +36,7 @@ class CartController{
     static editCart = async (req, res) => {
         const cid  = req.params.cid;
         const updatedProducts = req.body;
-          const updatedCart = await CartService.editCart(cid, updatedProducts);
+          const updatedCart = await cartsDao.editCart(cid, updatedProducts);
           res.send({updatedCart})
       }
     static editProductCartQuantity = async (req,res)=>{
@@ -44,7 +44,7 @@ class CartController{
         const pid = req.params.pid;
         const quantity = req.body.quantity;
         console.log(quantity)
-        const carts = await CartService.editProductCartQuantity(cid,pid,quantity);
+        const carts = await cartsDao.editProductCartQuantity(cid,pid,quantity);
         res.send({
             status:"success",
             msg: carts
@@ -53,14 +53,14 @@ class CartController{
     static deleteProductCart = async (req,res)=>{
         const cid = req.params.cid;
         const pid = req.params.pid;
-        const cart = await CartService.deleteProductCart(cid,pid)
+        const cart = await cartsDao.deleteProductCart(cid,pid)
         res.send({
             cart
         })
     }
     static deleteProductCartAll = async (req,res)=>{
         const cid = req.params.cid;
-        const cart = await CartService.deleteProductCartAll(cid)
+        const cart = await cartsDao.deleteProductCartAll(cid)
         res.send({
             cart
         })

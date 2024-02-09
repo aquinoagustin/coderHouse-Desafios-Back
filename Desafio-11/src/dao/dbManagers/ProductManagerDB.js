@@ -1,6 +1,6 @@
 import productsModel from "../models/products.models.js";
 
-export default class ProductManagerDB {
+export class ProductManagerDB {
 
 
   saveProduct = async (prod) => {

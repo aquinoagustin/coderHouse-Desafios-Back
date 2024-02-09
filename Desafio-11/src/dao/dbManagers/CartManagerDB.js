@@ -1,7 +1,7 @@
 import cartsModel from "../models/cart.models.js";
-import ProductManagerDB from './ProductManagerDB.js';
+import {ProductManagerDB} from './ProductManagerDB.js';
 const productService = new ProductManagerDB();
-export default class CartManagerDB {
+export class CartManagerDB {
 
     getAll = async () => {
         const carts = await cartsModel.find().populate('products.product');

@@ -1,10 +1,10 @@
-import {ProductService} from '../service/ProductManagerDB.service.js';
+import {productsDao} from '../dao/index.js';
 
 class ProductController{
     static getProduct = async (req,res) =>{
             try {
                 const { limit, page, sort, category, availability, query} = req.query
-                const products = await ProductService.getAll(limit, page, sort, category, availability, query)
+                const products = await productsDao.getAll(limit, page, sort, category, availability, query)
                 res.send({
                     status: "success",
                     products: products
@@ -20,7 +20,7 @@ class ProductController{
 
     static saveProduct = async (req,res)=>{
         const product = req.body;
-        const products = await ProductService.saveProduct(product);
+        const products = await productsDao.saveProduct(product);
     
         res.send({
             status:"succes",
@@ -31,7 +31,7 @@ class ProductController{
 
     static getBy = async (req,res)=>{
         const pid = req.params.pid;
-        const result = await ProductService.getBy({_id:pid});
+        const result = await productsDao.getBy({_id:pid});
         res.send({
             status:"success",
             msg:`Product ${pid} `,
@@ -42,7 +42,7 @@ class ProductController{
     static updateProduct = async (req,res)=>{
         const pid = req.params.pid;
         const prod = req.body;
-        const result = await ProductService.updateProduct(pid,prod)
+        const result = await productsDao.updateProduct(pid,prod)
         res.send({
             status:"success",
             msg:`Ruta PUT de PRODUCTS con ID: ${pid}`,
