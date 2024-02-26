@@ -1,5 +1,5 @@
 import {cartsDao} from '../dao/index.js';
-
+import { productsDao } from '../dao/index.js';
 
 class CartController{
     static getCart = async (req,res)=>{
@@ -9,6 +9,7 @@ class CartController{
             carritos: carts
         })
     }
+
     static getBy = async (req,res)=>{
         const cid = req.params.cid;
         const cart = await cartsDao.getBy({_id:cid})
@@ -65,7 +66,14 @@ class CartController{
             cart
         })
     }
+    static finalizePurchase = async (req, res) => {
+        const cid = req.params.cid;
+        const email = req.body.email;
+        const result = await cartsDao.finalizePurchase(cid,email)
+        res.send({
+            result
+        })
 
+    }
 }
-
 export {CartController};

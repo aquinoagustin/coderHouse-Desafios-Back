@@ -63,9 +63,10 @@ export class ProductManagerDB {
 };
 
 getBy = async (params) => {
-  let result = await this.model.findOne(params);
-  return result;
+    let result = await this.model.findOne(params);
+    return result;
 }
+
 
 updateProduct = async (id,prod) => {
     delete prod._id;

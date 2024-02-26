@@ -11,7 +11,7 @@ class ViewsController{
 
     static cart = async(req,res)=>{
         const cid = req.params.cid;
-        const cart = await cartsDao.getBy({_id:cid}).lean()
+        const cart = await cartsDao.getBy({_id:cid})
         res.render('cart',{cart}) 
      }
 

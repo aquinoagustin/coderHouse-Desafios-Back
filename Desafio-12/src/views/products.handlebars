@@ -18,9 +18,9 @@
             <div class="card-body">
                 <h5 class="card-title" id="card-h5">{{title}}</h5>
                 <h4 class="card-title">US$ ${{price}}</h4>
-                <p class="card-text">Description:${{description}}</p>
-                <p class="card-text">Quantity: ${{stock}}</p>
-                <button>Agregar al carrito</button>
+                <p class="card-text">Description:{{description}}</p>
+                <p class="card-text">Quantity: {{stock}}</p>
+                <button onclick="addToCart('{{this._id}}')">Agregar al Carrito</button>
             </div>
         </div>
     {{/each}}
@@ -30,4 +30,5 @@
 <a href="/api/sessions/logout"> <button>Salir</button> </a>     
         
 </div>
+<script src="/index.js"></script>
 <script src="/css/products.css"></script>

@@ -1,10 +1,18 @@
 import cartsModel from "../models/cart.models.js";
 import {ProductManagerDB} from './ProductManagerDB.js';
+import {ticketsModel} from '../models/ticket.model.js';
+import productsModel from "../models/products.models.js";
+import { v4 as uuidv4 } from 'uuid';
+import { productsDao } from "../index.js";
+import { transporter } from "../../config/gmail.js";
+
 export class CartManagerDB {
 
     constructor(){
         this.modelCart = cartsModel;
         this.managerProduct = ProductManagerDB;
+        this.modelTicket = ticketsModel;
+        this.modelProduct = productsModel;
     }
 
     getAll = async () => {
@@ -39,7 +47,8 @@ export class CartManagerDB {
                     msg: `El carrito con el id ${cid} no existe`
                 } 
             };
-            const product = await this.managerProduct.getBy({_id:pid});
+
+            const product = await productsDao.getBy({_id:pid});
             if (!product){
                 return {
                     status: "error",
@@ -78,7 +87,7 @@ export class CartManagerDB {
                 msg: `El carrito con el id ${cid} no existe`
             } 
         };
-        const product = await this.managerProduct.getBy({_id:pid});
+        const product = await productsDao.getBy({_id:pid});
         if (!product){
             return {
                 status: "error",
@@ -149,7 +158,7 @@ export class CartManagerDB {
                     msg: `El carrito con el id ${cid} no existe`
                 } 
             };
-            const product = await this.managerProduct.getBy({_id:pid});
+            const product = await productsDao.getBy({_id:pid});
             if (!product){
                 return {
                     status: "error",
@@ -178,6 +187,110 @@ export class CartManagerDB {
             console.log(error)
         }
         
+    }
+
+    enviarEmail = async (email,params)=>{
+
+try {
+    const emailTemplate = `<div>
+    <h1>Bienvenido!!</h1>
+    <img src="https://fs-prod-cdn.nintendo-europe.com/media/images/10_share_images/portals_3/2x1_SuperMarioHub.jpg" style="width:250px"/>
+    <h2>${params.message}</h2>
+    <p>Ticket N°:${params.ticket}</p>
+    <h3>${params.total}</h3>
+    <img width='100px' src='cid:perrito'>
+    <a href="https://www.google.com/">Explorar</a>
+    </div>`;
+
+    const contenido = await transporter.sendMail({
+
+
+        from: "Ecommerce CoderCommers",
+        to:email,
+        subject:"Registro exitoso",
+        html: emailTemplate,
+        attachments:[]
+    })
+    console.log("Contenido", contenido);
+    return({
+        status:"success",
+        message:"envio exitoso"
+    });
+
+} catch (error) {
+    console.log(error.message);
+    return({
+        status:"error",
+        message:"Hubo un error al tratar de mandar el mail"
+    })
+
+}
+
+
+}
+
+    finalizePurchase = async (cid,email) =>{
+
+        try {
+            const cart = await cartsModel.findById(cid).populate('products.product');
+            if (!cart) return 'Carrito no encontrado'
+            let totalAmount = 0;
+            const prodsActualizados = [];
+            const prodsSinStock = [];
+            console.log(cart.products)
+            cart.products.forEach (item => {
+                const product = item.product;
+                if (product.stock < item.quantity) {
+                    console.log(product.stock)
+                    prodsSinStock.push({ productId: product._id, title: product.title });
+                } else {
+                    totalAmount += product.price * item.quantity;
+                    prodsActualizados.push({ product, quantity: item.quantity });
+                }
+            });
+
+
+            if (Object.entries(prodsSinStock).length === 0) {
+                await Promise.all(prodsActualizados.map(({ product, quantity }) =>
+                    productsModel.findByIdAndUpdate(product._id, { $inc: { stock: -quantity } })
+                ));
+
+                const ticket = new ticketsModel({
+                    code:uuidv4(),
+                    purchaser: email,
+                    amount: totalAmount,
+                });
+                if(Object.entries(cart.products).length === 0) return ({
+                    error:'Carrito vacío',
+                    message:'No se realizó la compra, porque su carrito esta vacío'
+                })
+                await ticket.save();
+                cart.products = [];
+                await cart.save();
+
+
+
+                const compraRealizada = ({
+                    message: 'Se realizó la compra, dentro de unos minutos le enviaremos a su email la factura correspondiente', 
+                    ticket: ticket._id,
+                    total:`Total a pagar: US$ ${totalAmount}`
+                })
+
+                const confirmMail = this.enviarEmail(email,compraRealizada);
+
+                return ({
+                    compraRealizada,
+                    confirmMail
+                })
+            }
+
+             
+
+
+            return ({ message: 'Hay productos sin suficiente stock', prodsSinStock });
+        } catch (error) {
+             return ({ error: error.message });
+        }
     }
 }
 
