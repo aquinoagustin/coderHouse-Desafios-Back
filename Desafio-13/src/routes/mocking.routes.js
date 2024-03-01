@@ -4,7 +4,7 @@ import { generateUser } from '../utils.js';
 const router = Router();
 
 router.get('/',(req,res)=>{
-    const cant = parseInt(req.query.cant) || 100;
+    const cant =  100;
     let users = [];
     for (let i = 0; i < cant; i++) {
         const user = generateUser();

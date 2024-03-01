@@ -20,7 +20,7 @@ export default __dirname;
 
 export const customFaker = new Faker({ locale: [en] });
 
-const { commerce, image, database, string, internet, person, phone,datatype, lorem } = customFaker;
+const { commerce, image, database, string, internet, person,datatype } = customFaker;
 
 
 export const generateProduct = () =>{
@@ -32,7 +32,7 @@ export const generateProduct = () =>{
         thumbnail: image.url(),
         code: string.alphanumeric(10),
         stock: parseInt(string.numeric(2)),
-        departament: commerce.department(),
+        category: commerce.productMaterial()
     }
 }
 
@@ -43,15 +43,15 @@ export const generateUser = () => {
          const product = generateProduct();
          products.push(product);
     }
+    const hashedPassword = createHash(internet.password());
     return {
         id: database.mongodbObjectId(),
         first_name: person.firstName(),
         last_name: person.lastName(),
-        phone: phone.number(),
         email: internet.email(),
-        avatar: image.avatar(),
-        role: datatype.boolean() ? "premium" : "user",
-        jobTitle: person.jobTitle(),
-        cart: products
+        age:parseInt(string.numeric(2)),
+        password:hashedPassword,
+        cart: products,
+        role: datatype.boolean() ? "premium" : "user"
     }
 }
