@@ -16,5 +16,13 @@ export const cartsError = {
     editProductCartQuantity:'Error al editar la cantidad del carrito',
     deleteProductCart:'Error al eliminar producto del carrito',
     deleteProductCartAll:'Error al eliminar todos los productos del carrito',
-    finalizePurchase:'Error al finalizar la compra'
+    finalizePurchase:'Error al finalizar la compra',
+    emailTemplate:'Hubo un error al mandar el mail'
+}
+
+export const usersError = {
+    getAll:'Error al ver los usuarios',
+    saveUser:'Error al guardar al usuario',
+    getBy:'Error al encontrar al usuario seleccionado',
+    updateUser:'Error al actualizar al usuario'
 }

@@ -5,6 +5,7 @@ import productsModel from "../models/products.models.js";
 import { v4 as uuidv4 } from 'uuid';
 import { productsDao } from "../index.js";
 import { transporter } from "../../config/gmail.js";
+import {cartsError} from '../../errores.js'; 
 
 export class CartManagerDB {
 
@@ -16,20 +17,44 @@ export class CartManagerDB {
     }
 
     getAll = async () => {
-        const carts = await this.modelCart.find().populate('products.product');
-        return [carts];
+        try {
+            const carts = await this.modelCart.find().populate('products.product');
+            return [carts]; 
+        } catch (error) {
+            return({
+                status:"error",
+                message:cartsError.getAll
+            })
+        }
+
     }
 
 
     getBy = async (params) => {
-        let result = await this.modelCart.findOne(params);
-        return result;
+        try {
+            let result = await this.modelCart.findOne(params);
+            return result;
+        } catch (error) {
+            return({
+                status:"error",
+                message:cartsError.getBy
+            })
+        }
+
     }
 
 
     saveCart = async () => {
-        let result = await this.modelCart.create({});
-        return result;
+        try {
+            let result = await this.modelCart.create({});
+            return result; 
+        } catch (error) {
+            return({
+                status:"error",
+                message:cartsError.saveCart
+            })
+        }
+
     }
 
 
@@ -73,7 +98,10 @@ export class CartManagerDB {
             
             return cart;     
         } catch (error) {
-            console.log(error)
+            return({
+                status:"error",
+                message:cartsError.addProductInCart
+            })
         }
         
     
@@ -108,7 +136,10 @@ export class CartManagerDB {
         await cart.save();
         return cart
         } catch (error) {
-            console.log(error)
+            return({
+                status:"error",
+                message:cartsError.deleteProductCart
+            })
         }
         
     }
@@ -126,7 +157,10 @@ export class CartManagerDB {
             await cart.save();
             return cart    
         } catch (error) {
-            console.log(error)
+            return({
+                status:"error",
+                message:cartsError.deleteProductCartAll
+            })
         }
 
 
@@ -145,7 +179,10 @@ export class CartManagerDB {
           await cart.save();
           return cart;
         } catch (error) {
-            console.log(error)
+            return({
+                status:"error",
+                message:cartsError.editCart
+            })
         }
       }
 
@@ -184,7 +221,10 @@ export class CartManagerDB {
             await cart.save();
             return cart    
         } catch (error) {
-            console.log(error)
+            return({
+                status:"error",
+                message:cartsError.editProductCartQuantity
+            })
         }
         
     }
@@ -218,10 +258,9 @@ try {
     });
 
 } catch (error) {
-    console.log(error.message);
     return({
         status:"error",
-        message:"Hubo un error al tratar de mandar el mail"
+        message:cartsError.emailTemplate
     })
 
 }
@@ -289,7 +328,10 @@ try {
 
             return ({ message: 'Hay productos sin suficiente stock', prodsSinStock });
         } catch (error) {
-             return ({ error: error.message });
+            return({
+                status:"error",
+                message:cartsError.finalizePurchase
+            })
         }
     }
 }

@@ -1,22 +1,46 @@
 class SessionController{
     static register = async(req,res) => {
+      try {
         res.send({status:'success',message:'User registrado'})
+      } catch (error) {
+        res.status(500).send({
+          error:error.message
+        })
+      }
+
       }
 
     static failRegister = async(req,res)=>{
-        console.log('Fallo el registro');
-        res.send({error:'Fallo en el registro'})
+        try {
+          res.send({error:'Fallo en el registro'})
+        } catch (error) {
+          res.status(500).send({
+            error:error.message
+          })
+        }
+
     }      
     static failLogin = (req,res)=>{
+      try {
         res.send({error:'fail login'})
+      } catch (error) {
+        res.status(500).send({error:error.message})
+      }
+
     }
     static github = async (req,res)=>{};
 
     static githubCallBack = async (req,res)=>{
+      try {
         req.session.user = req.user;
         res.redirect('/');
+      } catch (error) {
+        res.status(500).send({error:error.message})
+      }
+
     }    
     static login =   async(req,res) => {
+      try {
         if(!req.user){
           return res.status(400).send({status:'error'})
         }
@@ -26,10 +50,15 @@ class SessionController{
           age:req.user.age,
           email:req.user.email,
         }
-        res.send({status:'success',payload:req.user})
+        res.send({status:'success',payload:req.user})  
+      } catch (error) {
+        res.status(500).send({error:error.message})
+      }
+
       }
     
     static logout = (req, res) => {
+      try {
         req.session.destroy((err) => {
           if (err) {
             return res.status(500).send({
@@ -39,6 +68,11 @@ class SessionController{
           }
           res.redirect("/");
         });
+      } catch (error) {
+        res.status(500).send({error:error.message})
+      }
+
+
       }
 
 }

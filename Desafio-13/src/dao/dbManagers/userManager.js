@@ -1,5 +1,6 @@
 import userModel from "../models/Users.model.js";
 import {CartManagerDB} from './CartManagerDB.js';
+import { usersError } from "../../errores.js";
 
 export class Users {
 
@@ -9,22 +10,53 @@ export class Users {
     }
 
     getAll = async () => {
-        let users = await this.modelUser.find().lean().populate('cart');
-        return users;
+        try {
+            let users = await this.modelUser.find().lean().populate('cart');
+            return users;   
+        } catch (error) {
+            return({
+                status:"error",
+                message:usersError.getAll
+            })
+        }
+
     }
     saveUser = async (user) => {
-        const cart = await this.managerCart.saveCart();
-        user.cart = cart;
-        let result = await this.modelUser.create(user);
-        return result;
+        try {
+            const cart = await this.managerCart.saveCart();
+            user.cart = cart;
+            let result = await this.modelUser.create(user);
+            return result;    
+        } catch (error) {
+            return({
+                status:"error",
+                message:usersError.saveUser
+            })
+        }
+
     }
     getBy = async (params) => {
-        let result = await this.modelUser.findOne(params).populate('cart');
-        return result;
+        try {
+            let result = await this.modelUser.findOne(params).populate('cart');
+            return result;    
+        } catch (error) {
+            return({
+                status:"error",
+                message:usersError.getBy
+            })
+        }
+
     }
     updateUser = async (id,user) => {
-        delete user._id;
-        let result = await this.modelUser.updateOne({_id:id},{$set:user})
-        return result
+        try {
+            delete user._id;
+            let result = await this.modelUser.updateOne({_id:id},{$set:user})
+            return result
+        } catch (error) {
+            return({
+                status:"error",
+                message:usersError.saveProduct
+            })
+        }
     }
 }

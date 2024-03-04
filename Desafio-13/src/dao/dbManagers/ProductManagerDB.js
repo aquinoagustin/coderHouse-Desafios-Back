@@ -1,5 +1,5 @@
 import productsModel from "../models/products.models.js";
-
+import { prodsError } from "../../errores.js";
 export class ProductManagerDB {
 
     constructor(){
@@ -7,13 +7,22 @@ export class ProductManagerDB {
     }
 
   saveProduct = async (prod) => {
-    let result = await this.model.create(prod);
-    return result;
+    try {
+        let result = await this.model.create(prod);
+        return result;
+    } catch (error) {
+        return({
+            status:"error",
+            message:prodsError.saveProduct
+        })
+    }
+
 }
 
 
   getAll = async (limit, page, sort, category, availability, query) => {
-    const filter = {};
+    try {
+        const filter = {};
     if (category) {
         filter.category = category;
     }
@@ -60,19 +69,42 @@ export class ProductManagerDB {
         status: "success",
         msg: products
     }
+    } catch (error) {
+        return({
+            status:"error",
+            message:prodsError.getAll
+        })
+    }
+    
 };
 
 getBy = async (params) => {
-    let result = await this.model.findOne(params);
-    return result;
+    try {
+        let result = await this.model.findOne(params);
+        return result;   
+    } catch (error) {
+        return({
+            status:"error",
+            message:prodsError.getBy
+        })
+    }
+
 }
 
 
 updateProduct = async (id,prod) => {
-    delete prod._id;
+    try {
+        delete prod._id;
     let result = await this.model.updateOne({_id:id},{$set:prod})
-    return result
-}
+    return result    
+    } catch (error) {
+        return({
+            status:"error",
+            message:prodsError.updateProduct
+        })
+    }
+
+    }
 
 }
 
