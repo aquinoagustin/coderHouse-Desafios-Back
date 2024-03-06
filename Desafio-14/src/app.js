@@ -14,7 +14,7 @@ import inicializePassport from './config/passport.config.js';
 import {options} from './config/config.js';
 import { Server } from "socket.io";
 import { mockingRouter } from './routes/mocking.routes.js';
-
+import {addLogger} from './config/logger.js';
 
 const connection = mongoose.connect(options.mongo.url);
 
@@ -55,6 +55,8 @@ app.set('view engine','handlebars');
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
+app.use(addLogger);
+
 
 
 
@@ -64,6 +66,12 @@ app.use("/api/carts", cartRouter);
 app.use("/", viewsRouter)
 app.use('/api/sessions',sessionRouter);    
 app.use('/api/mockingproducts',mockingRouter);
+
+app.get('/errr',(req,res)=>{
+    req.logger.warn('Error!')
+    res.send('Bienvenido!');
+})
+
 
 const httpServer = app.listen(PORT, ()=>{
     console.log(`Servidor funcionando en el puerto: ${PORT}`);
