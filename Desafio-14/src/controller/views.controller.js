@@ -9,6 +9,7 @@ class ViewsController{
             const products = await productsDao.getAll(limit, page, sort, category, availability, query);
             res.render('products',{products: products.msg.docs,user:req.session.user}); 
         } catch (error) {
+            req.logger.error('No se encontraron los productos')
             res.status(500).send({
                 error:error.message,
                 msg:'No se encontraron los productos'
@@ -23,6 +24,7 @@ class ViewsController{
             const cart = await cartsDao.getBy({_id:cid})
             res.render('cart',{cart})       
         } catch (error) {
+            req.logger.error('No se encontro el carrito')
             res.status(500).send({
                 error:error.message,
                 msg:'No se encontro el carrito'
@@ -35,6 +37,7 @@ class ViewsController{
         try {
             res.render('register');  
         } catch (error) {
+            req.logger.error('No se registro')
             res.status(500).send({
                 error:error.message,
                 msg:'Error'
@@ -47,6 +50,7 @@ class ViewsController{
         try {
             res.render('login');
         } catch (error) {
+            req.logger.error('No se pudo loguear')
             res.status(500).send({error:error.message})
         }
 

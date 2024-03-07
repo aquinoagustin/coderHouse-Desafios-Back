@@ -17,7 +17,8 @@ export const cartsError = {
     deleteProductCart:'Error al eliminar producto del carrito',
     deleteProductCartAll:'Error al eliminar todos los productos del carrito',
     finalizePurchase:'Error al finalizar la compra',
-    emailTemplate:'Hubo un error al mandar el mail'
+    emailTemplate:'Hubo un error al mandar el mail',
+    errorDB:'No se pudo conectar a la base de datos'
 }
 
 export const usersError = {

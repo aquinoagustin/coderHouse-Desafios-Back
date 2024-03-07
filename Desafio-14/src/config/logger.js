@@ -11,27 +11,32 @@ const customLevels = {
         fatal:0,
         error:1,
         warn:2,
-        info:3
+        info:3,
+        http:4,
+        debug:5
+
     },
     colors:{
         fatal:'red',
         error:'orange',
         warn:'yellow',
-        info:'blue'
+        info:'blue',
+        http:'green',
+        debug:'white'
     }
 }
 
 const devLogger = winston.createLogger({
     levels:customLevels.levels,
     transports:[
-        new winston.transports.Console({level:"info"})
+        new winston.transports.Console({level:"debug"})
     ]
 });
 
 const prodLogger = winston.createLogger({
     transports:[
-        new winston.transports.Console({level:'http'}),
-        new winston.transports.File({filename: path.join(__dirname,'/logs/errores.log'),level:'warn'})
+        new winston.transports.Console({level:'info'}),
+        new winston.transports.File({filename: path.join(__dirname,'/logs/errores.log'),level:'error'})
     ]
 })
 

@@ -3,6 +3,7 @@ class SessionController{
       try {
         res.send({status:'success',message:'User registrado'})
       } catch (error) {
+        req.logger.error('Error de conexion')
         res.status(500).send({
           error:error.message
         })
@@ -14,6 +15,7 @@ class SessionController{
         try {
           res.send({error:'Fallo en el registro'})
         } catch (error) {
+          req.logger.error('Error de conexion')
           res.status(500).send({
             error:error.message
           })
@@ -24,6 +26,7 @@ class SessionController{
       try {
         res.send({error:'fail login'})
       } catch (error) {
+        req.logger.error('Error de conexion')
         res.status(500).send({error:error.message})
       }
 
@@ -35,6 +38,7 @@ class SessionController{
         req.session.user = req.user;
         res.redirect('/');
       } catch (error) {
+        req.logger.error('Error de conexion')
         res.status(500).send({error:error.message})
       }
 
@@ -52,6 +56,7 @@ class SessionController{
         }
         res.send({status:'success',payload:req.user})  
       } catch (error) {
+        req.logger.error('Error de conexion')
         res.status(500).send({error:error.message})
       }
 
@@ -69,6 +74,7 @@ class SessionController{
           res.redirect("/");
         });
       } catch (error) {
+        req.logger.error('Error de conexion')
         res.status(500).send({error:error.message})
       }
 

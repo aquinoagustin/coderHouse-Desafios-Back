@@ -6,11 +6,13 @@ class ProductController{
             try {
                 const { limit, page, sort, category, availability, query} = req.query
                 const products = await productsDao.getAll(limit, page, sort, category, availability, query)
+                req.logger.info(`products:${products}`)
                 res.send({
                     status: "success",
                     products: products
                 });
             } catch (error) {
+                req.logger.error(prodsError.getProduct)
                 res.status(500).send({
                     status:'error',
                     error:error.message,
@@ -23,13 +25,14 @@ class ProductController{
         try {
             const product = req.body;
             const products = await productsDao.saveProduct(product);
-        
+            req.logger.info(`products:${products}`)
             res.send({
                 status:"succes",
                 msg:"Producto creado",
                 productos: products
             })
         } catch (error) {
+            req.logger.error(prodsError.saveProduct)
             res.status(500).send({
                 status:'error',
                 error:error.message,
@@ -42,12 +45,14 @@ class ProductController{
         try {
             const pid = req.params.pid;
             const result = await productsDao.getBy({_id:pid});
+            req.logger.info(`PID:${pid} getProduct:${result}`)
             res.send({
                 status:"success",
                 msg:`Product ${pid} `,
                 result
             })    
         } catch (error) {
+            req.logger.error(prodsError.getBy)
             res.status(500).send({
                 status:'error',
                 error:error.message,
@@ -62,12 +67,14 @@ class ProductController{
             const pid = req.params.pid;
             const prod = req.body;
             const result = await productsDao.updateProduct(pid,prod)
+            req.logger.info(`PID:${pid} products:${result}`)
             res.send({
                 status:"success",
                 msg:`Ruta PUT de PRODUCTS con ID: ${pid}`,
                 result
             })   
         } catch (error) {
+            req.logger.error(prodsError.updateProduct)
             res.status(500).send({
                 status:'error',
                 error:error.message,
@@ -80,11 +87,13 @@ class ProductController{
     static deleteProduct = async (req,res)=>{
         try {
             const pid = req.params.pid;
+            req.logger.info(`PID:${pid}`)
             res.send({
                 status:"success",
                 msg:`Ruta DELETE de PRODUCTS con ID: ${pid}`
             })  
         } catch (error) {
+            req.logger.error(prodsError.deleteProduct)
             res.status(500).send({
                 status:'error',
                 error:error.message,

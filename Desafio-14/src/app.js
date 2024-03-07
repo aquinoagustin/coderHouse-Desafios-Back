@@ -15,6 +15,7 @@ import {options} from './config/config.js';
 import { Server } from "socket.io";
 import { mockingRouter } from './routes/mocking.routes.js';
 import {addLogger} from './config/logger.js';
+import testRouter from './routes/test.routes.js';
 
 const connection = mongoose.connect(options.mongo.url);
 
@@ -66,11 +67,8 @@ app.use("/api/carts", cartRouter);
 app.use("/", viewsRouter)
 app.use('/api/sessions',sessionRouter);    
 app.use('/api/mockingproducts',mockingRouter);
+app.use('/loggertest',testRouter);
 
-app.get('/errr',(req,res)=>{
-    req.logger.warn('Error!')
-    res.send('Bienvenido!');
-})
 
 
 const httpServer = app.listen(PORT, ()=>{

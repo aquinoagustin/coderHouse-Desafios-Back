@@ -8,8 +8,8 @@ router.get('/', CartController.getCart)
 
 router.get('/:cid', CartController.getBy)
 router.post('/', checkRole(['user']), CartController.saveCart)
-//router.post("/:cid/product/:pid",checkRole(['user']),CartController.addProductInCart )
-router.post("/:cid/product/:pid",CartController.addProductInCart )
+router.post("/:cid/product/:pid",checkRole(['user']),CartController.addProductInCart )
+
 router.post('/:cid/purchase',CartController.finalizePurchase)
 
 
