@@ -1,0 +1,90 @@
+paths:
+ /api/carts/:
+  get:
+   summary: Obtener todos los carritos
+   tags:
+    - Carts
+   responses:
+    "200":
+     description: Los carritos se obtuvieron de forma correcta
+     content:
+      application/json:
+       schema:
+        type: array
+        items:
+         $ref: "#components/schemas/Cart"
+    "500":
+     description: Error interno del servidor
+  post:
+   summary: Agregar nuevo carrito
+   tags:
+    - Carts
+   parameters:
+      schema:
+       $type: object
+   responses:
+    "200":
+     description: Carrito nuevo agregado
+    "500":
+     description: Error interno del servidor
+ /api/carts/{cid}/product/{pid}:
+  post:
+   summary: Agregar producto a carrito
+   tags:
+    - Carts
+   parameters:
+    - name: cid
+      in: path
+      required: true
+      description: cid es el id del carrito que selecciono
+      schema:
+       $type: string
+    - name: pid
+      in: path
+      required: true
+      description: pid es el id del producto que selecciono
+      schema:
+       $type: string
+   responses:
+    "200":
+     description: Producto agregado al carrito
+    "500":
+     description: Error interno del servidor
+components:
+ schemas:
+  Prod:
+   type: object
+   properties:
+    products:
+     type: object
+     description: id del producto
+ requestBodies:
+  UpdateProd:
+   type: object
+   properties:
+    title:
+     type: string
+     description: Nombre del producto
+    description:
+     type: string
+     description: Descripcion del producto
+    price:
+     type: string
+     description: Precio del producto
+    thumbnail:
+     type: string
+     description: Ruta de la imagen del producto
+    code:
+     type: string
+     description: Codigo unico del producto
+    stock:
+     type: number
+     description: 25
+   example:
+    _id: ObjectId("gsa98273skjhgda8912")
+    title: Teclado keyboard
+    description: Keyboard Dell, ultima generacion
+    price: 999
+    thumbnail: "http:www.imagen/perrito.jpg"
+    code: EEAS55
+    stock: 47

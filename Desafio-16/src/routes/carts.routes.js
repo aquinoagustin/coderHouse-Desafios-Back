@@ -7,7 +7,8 @@ const router = Router();
 router.get('/', CartController.getCart)
 
 router.get('/:cid', CartController.getBy)
-router.post('/', checkRole(['user']), CartController.saveCart)
+//router.post('/', checkRole(['user']), CartController.saveCart)
+router.post('/',CartController.saveCart)
 router.post("/:cid/product/:pid",checkRole(['user']),CartController.addProductInCart )
 
 router.post('/:cid/purchase',CartController.finalizePurchase)
