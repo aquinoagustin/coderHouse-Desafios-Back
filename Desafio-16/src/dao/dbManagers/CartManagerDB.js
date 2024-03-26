@@ -173,22 +173,21 @@ export class CartManagerDB {
     }
     async editCart(cid, updatedProducts) {
         try {
-          const cart = await this.getBy({_id:cid});
+          const cart = await cartsModel.findOne({ _id: cid });
+      
           if (!cart) {
-            return{
-                status: "error",
-                msg: `El carrito con el ID ${cid} no existe`
-            }
+            throw new Error(`Carrito con ID ${cid} no encontrado.`);
           }
           console.log(updatedProducts)
-          cart.products = updatedProducts;
+      
+          cart.products = updatedProducts ;
+      
           await cart.save();
+      
           return cart;
         } catch (error) {
-            return({
-                status:"error",
-                message:cartsError.editCart
-            })
+          console.error(`Error al actualizar el carrito con ID ${cid}: ${error.message}`);
+          throw error;
         }
       }
 

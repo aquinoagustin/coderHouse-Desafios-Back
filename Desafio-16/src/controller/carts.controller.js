@@ -80,25 +80,15 @@ class CartController{
         }
 
     }
-    static editCart = async (req, res) => {
+    static editCart = async (req, res) =>{
+        const { cid } = req.params;
+        const updatedProducts = req.body;
         try {
-            const cid  = req.params.cid;
-            const updatedProducts = req.body;
-            const updatedCart = await cartsDao.editCart(cid, updatedProducts);
-            req.logger.info(`CID: ${cid}  ${updatedCart} `)
-            res.send({
-                status:'success',
-                msg:updatedCart
-            })     
+          const updatedCart = await cartsDao.editCart(cid, updatedProducts);
+          res.json(updatedCart);
         } catch (error) {
-            req.logger.error(cartsError.editCart)
-            res.status(500).send({
-                status:'error',
-                error:error.message,
-                msg:cartsError.editCart
-            })
+          res.status(500).json({ error: error.message });
         }
-
       }
     static editProductCartQuantity = async (req,res)=>{
         try {

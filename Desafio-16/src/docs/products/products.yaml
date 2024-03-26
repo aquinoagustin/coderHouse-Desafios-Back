@@ -31,7 +31,7 @@ paths:
      content:
       application/json:
        schema:
-        type: objet
+        type: object
         properties:
          status:
           type: string
