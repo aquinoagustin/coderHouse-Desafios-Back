@@ -161,6 +161,26 @@ paths:
      description: Cantidad actualizada
     "500":
      description: Error interno del servidor
+ /api/carts/{cid}/purchase:
+  post:
+   summary: Agregar producto a carrito
+   tags:
+    - Carts
+   parameters:
+    - name: cid
+      in: path
+      required: true
+      description: cid es el id del carrito que selecciono
+   requestBody:
+    required: true
+    content:
+     application/json:
+      schema:
+       $ref: "#components/requestBodies/Purchase"
+    "200":
+     description: Compra realizada
+    "500":
+     description: Error interno del servidor
 components:
  schemas:
   Prod:
@@ -233,3 +253,11 @@ components:
      description: Cantidad del nuevo producto
    example:
     quantity: 47
+  Purchase:
+   type: object
+   properties:
+    email:
+     type: string
+     description: Nombre del producto
+   example:
+    email: "aagustin067@gmail.com"

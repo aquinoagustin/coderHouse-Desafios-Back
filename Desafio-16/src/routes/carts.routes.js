@@ -10,7 +10,7 @@ router.post('/',CartController.saveCart) //
 router.get('/:cid', CartController.getBy) //
 router.put("/:cid", CartController.editCart);//
 router.delete('/:cid', CartController.deleteProductCartAll)//
-//router.post('/', checkRole(['user']), CartController.saveCart)
+//router.post('/',  checkRole(['user']), CartController.saveCart)
 //router.post("/:cid/product/:pid",checkRole(['user']),CartController.addProductInCart )
 
 router.post("/:cid/product/:pid",CartController.addProductInCart ) //
