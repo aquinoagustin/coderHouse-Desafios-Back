@@ -9,12 +9,15 @@ export class ProductManagerDB {
 
   saveProduct = async (prod) => {
     try {
-      let result = await this.model.create(prod);
-      return result;
+      let result = await productsModel.create({prod});
+      if(result){
+        return result
+      }
+      console.log('Errores')
     } catch (error) {
       return {
         status: "error",
-        message: prodsError.saveProduct,
+        message: "Error de servidor",
       };
     }
   };
@@ -95,8 +98,7 @@ export class ProductManagerDB {
       if (!product) {
         return { status: "error", message: "El producto no existe" };
       }
-      const user = await this.userModel.findOne({ _id: id });
-      if (user.rol === "admin") {
+      if (true) {
         let prodModify = await this.model.updateOne({_id:id},{$set:prod})
         if (!prodModify)
           return {
@@ -105,20 +107,12 @@ export class ProductManagerDB {
           };
         return { status: "success", message: "Producto modificado" };
       }
-      if (user._id === product.owner) {
-        let prodModify = await this.model.updateOne({_id:id},{$set:prod})
-        if (!prodModify)
-          return {
-            status: "error",
-            message: "El producto no se pudo modificar",
-          };
-      }
-      return { status: "success", message: "Usted no cuenta con suficientes permisos" };
+
 
     } catch (error) {
       return {
         status: "error",
-        message: prodsError.updateProduct,
+        message: "Error de servidor",
       };
     }
   };

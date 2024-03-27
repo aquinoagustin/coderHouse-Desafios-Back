@@ -24,6 +24,7 @@ class ProductController{
     static saveProduct = async (req,res)=>{
         try {
             const product = req.body;
+            console.log(product)
             const products = await productsDao.saveProduct(product);
             req.logger.info(`products:${products}`)
             res.send({
@@ -68,11 +69,13 @@ class ProductController{
             const prod = req.body;
             const result = await productsDao.updateProduct(pid,prod)
             req.logger.info(`PID:${pid} products:${result}`)
-            res.send({
-                status:"success",
-                msg:`Ruta PUT de PRODUCTS con ID: ${pid}`,
-                result
-            })   
+            if(result){
+                res.send({
+                    status:"success",
+                    msg:`Ruta PUT de PRODUCTS con ID: ${pid}`,
+                    result
+                })  
+            } 
         } catch (error) {
             req.logger.error(prodsError.updateProduct)
             res.status(500).send({
