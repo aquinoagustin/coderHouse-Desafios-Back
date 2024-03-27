@@ -27,7 +27,7 @@ class ProductController{
             const products = await productsDao.saveProduct(product);
             req.logger.info(`products:${products}`)
             res.send({
-                status:"succes",
+                status:"success",
                 msg:"Producto creado",
                 productos: products
             })

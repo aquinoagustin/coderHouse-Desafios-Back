@@ -4,10 +4,10 @@ import {checkRole} from "../middlewares/auth.js";
 const router = Router();
 
 
-router.get('/',ProductController.getProduct);
+router.get('/',ProductController.getProduct); //
   
 //router.post('/',checkRole(['admin']),ProductController.saveProduct)
-router.post('/',ProductController.saveProduct)
+router.post('/',ProductController.saveProduct) //
 
 router.get('/:pid' ,ProductController.getBy)
 router.put('/:pid',checkRole(['admin']), ProductController.updateProduct)

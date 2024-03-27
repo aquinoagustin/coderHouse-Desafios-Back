@@ -158,6 +158,7 @@ class CartController{
             req.logger.info(`CID: ${cid}   EMAIL: ${email} PURCHASE:${result}  `)
             res.send({
                 status:'success',
+                txt:'Compra realizada',
                 msg:result
             })   
         } catch (error) {

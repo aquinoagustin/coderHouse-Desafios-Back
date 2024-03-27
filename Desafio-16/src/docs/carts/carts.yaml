@@ -3,7 +3,7 @@ paths:
   get:
    summary: Obtener todos los carritos
    tags:
-    - Carts cid
+    - Carts
    parameters:
     - name: cid
       in: path
@@ -25,7 +25,7 @@ paths:
   post:
    summary: Crear producto
    tags:
-    - Carts cid
+    - Carts
    requestBody:
     required: true
     content:
@@ -49,7 +49,7 @@ paths:
   put:
    summary: Editar productos
    tags:
-    - Carts cid
+    - Carts
    parameters:
     - name: cid
       in: path
@@ -71,7 +71,7 @@ paths:
   delete:
    summary: Eliminar todos los productos del carrito
    tags:
-    - Carts cid
+    - Carts
    parameters:
     - name: cid
       in: path
@@ -163,7 +163,7 @@ paths:
      description: Error interno del servidor
  /api/carts/{cid}/purchase:
   post:
-   summary: Agregar producto a carrito
+   summary: Finalizar compra del carrito
    tags:
     - Carts
    parameters:
@@ -183,6 +183,18 @@ paths:
      description: Error interno del servidor
 components:
  schemas:
+  Cart:
+   type: object
+   properties:
+    _id:
+     type: ObjectId
+     description: id del carrito
+    products:
+     type: string
+     description: Array de los productos
+   example:
+    _id: gsa98273skjhgda8912
+    products: [{"product": {"_id": "658abe9b80944aa1bbf64f92","title": "Auricular","description": "Auriculares duo","price": 10000,"thumbnail": "Sin imagen","code": "aur123","stock": 17,"__v": 0},"quantity": 5,"_id": "66037fd007aab9d87c4574ce"}]
   Prod:
    type: object
    properties:
