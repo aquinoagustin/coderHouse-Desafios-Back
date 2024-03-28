@@ -31,8 +31,8 @@ const producSchema = new mongoose.Schema({
         require: true
     },
     owner:{
-        type:mongoose.Schema.Types.ObjectId,ref:'Users',
-        default:'admin'
+         type: String, 
+         default: 'admin' 
     }
 })
 

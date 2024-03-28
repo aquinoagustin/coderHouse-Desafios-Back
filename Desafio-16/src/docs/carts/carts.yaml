@@ -38,7 +38,7 @@ paths:
     content:
      application/json:
       schema:
-       $ref: "#components/requestBodies/UpdateProd"
+       $ref: "#components/requestBodies/UpdateCart"
    responses:
     "200":
      description: Productos actualizados
@@ -203,8 +203,9 @@ components:
     thumbnail: "http:www.imagen/perrito.jpg"
     code: EEAS55
     stock: 47
+    category: Grande
  requestBodies:
-  UpdateProd:
+  UpdateCart:
    type: object
    properties:
     title:
@@ -233,6 +234,7 @@ components:
     thumbnail: "http:www.imagen/perrito.jpg"
     code: EEAS55
     stock: 47
+    category: Grande
   UpdateQuantity:
    type: object
    properties:

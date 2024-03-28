@@ -16,15 +16,12 @@ import mongoose from "mongoose";
           }
       ],
       default:[]
-  },
+    },
     rol:{
       type:String,
       enum:["user","admin","premium"],
       default:"user"
-  },
-  owner:{
-    type:String
-  }
+    }
  })
 
  const userModel = mongoose.model(collection,schema);

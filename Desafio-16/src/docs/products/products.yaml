@@ -105,9 +105,6 @@ components:
   Prod:
    type: object
    properties:
-    _id:
-     type: ObjectId
-     description: id del producto
     title:
      type: string
      description: Nombre del producto
@@ -126,14 +123,18 @@ components:
     stock:
      type: number
      description: Cantidad de productos disponibles
+    category:
+     type: string
+     description: Categoria del producto
    example:
-    _id: ObjectId("gsa98273skjhgda8912")
+    _id: ObjectId("gsa98273skjhgda8913")
     title: Teclado keyboard
     description: Keyboard Dell, ultima generacion
     price: 999
     thumbnail: "http:www.imagen/perrito.jpg"
     code: EEAS55
     stock: 47
+    category: Grande
  requestBodies:
   UpdateProd:
    type: object
@@ -156,12 +157,15 @@ components:
     stock:
      type: number
      description: Cantidad de productos disponibles
+    category:
+     type: string
+     description: Eliga la categoria del producto
    example:
-    _id: ObjectId("gsa98273skjhgda8912")
     title: Teclado keyboard
     description: Keyboard Dell, ultima generacion
     price: 999
     thumbnail: "http:www.imagen/perrito.jpg"
     code: EEAS55
     stock: 47
+    category: "ASDALSKDJASLk"
     

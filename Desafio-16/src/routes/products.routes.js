@@ -6,14 +6,14 @@ const router = Router();
 
 router.get('/',ProductController.getProduct); //
   
+
 router.post('/',checkRole(['admin']),ProductController.saveProduct)
 
-
 router.get('/:pid' ,ProductController.getBy)//
-router.put('/:pid',checkRole(['admin']), ProductController.updateProduct)
+router.put('/:pid',checkRole(['admin']), ProductController.updateProduct)//
 
 
-router.delete('/:pid',checkRole(['admin']) ,ProductController.deleteProduct)
+router.delete('/:pid',ProductController.deleteProduct)//
 
 
 export {router as productRouter};

@@ -9,12 +9,10 @@ export class ProductManagerDB {
 
   saveProduct = async (prod) => {
     try {
-      let result = await productsModel.create({prod});
-      if(result){
-        return result
-      }
-      console.log('Errores')
-    } catch (error) {
+      let result = await this.model.create(prod);
+      return result; 
+  }
+     catch (error) {
       return {
         status: "error",
         message: "Error de servidor",
