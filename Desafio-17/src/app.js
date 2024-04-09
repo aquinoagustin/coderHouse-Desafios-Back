@@ -22,7 +22,7 @@ import swaggerUi from 'swagger-ui-express';
 const connection = mongoose.connect(options.mongo.url);
 
 const PORT = options.server.port;
-const app = express();
+export const app = express();
 let messages = [];
 
 

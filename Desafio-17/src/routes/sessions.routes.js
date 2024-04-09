@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { SessionController } from "../controller/sessions.controller.js";
+import { getContactDTO } from "../dao/dto/contact.dto.js";
 
 const router = Router();
 
@@ -28,5 +29,30 @@ router.post("/forgot-password",SessionController.forgotPassword);
 
 
 router.post("/reset-password", SessionController.resetPassword);
+
+
+router.get("/current", (req, res) => {
+    try {
+      if (req.session && req.session.user) {
+        const userDTO = new getContactDTO(req.session.user);
+        res.status(200).json({
+          status: "success",
+          user: userDTO
+        });
+      } else {
+        res.status(401).json({
+          status: "error",
+          message: "No hay sesión de usuario activa"
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        status: "error",
+        message: "Error al obtener el usuario actual"
+      });
+    }
+  });
+  
 
 export default router;

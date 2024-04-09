@@ -13,10 +13,7 @@ export class ProductManagerDB {
       return result; 
   }
      catch (error) {
-      return {
-        status: "error",
-        message: "Error de servidor",
-      };
+      return error.error
     }
   };
 
@@ -65,82 +62,74 @@ export class ProductManagerDB {
 
       products.prevLink = prevLink;
       products.nextLink = nextLink;
-      return {
-        status: "success",
-        msg: products,
-      };
+      return products
     } catch (error) {
-      return {
-        status: "error",
-        message: prodsError.getAll,
-      };
+      return error.error
     }
   };
 
-  getBy = async (params) => {
+  /*
+  getBy = async (pid) => {
     try {
       let result = await this.model.findOne(params);
       return result;
     } catch (error) {
-      return {
-        status: "error",
-        message: prodsError.getBy,
-      };
+      return error
     }
   };
+*/
+
+async getBy(params) {
+  try {
+    let result = await this.model.findOne(params);
+    return result;
+  } catch (error) {
+    return error.error
+  }
+}
+
 
   updateProduct = async (id, prod) => {
     try {
       delete prod._id;
       const product = await this.getBy({ _id: id });
       if (!product) {
-        return { status: "error", message: "El producto no existe" };
+        console.log('Error, el producto no exíste')
       }
       if (true) {
         let prodModify = await this.model.updateOne({_id:id},{$set:prod})
         if (!prodModify)
-          return {
-            status: "error",
-            message: "El producto no se pudo modificar",
-          };
-        return { status: "success", message: "Producto modificado" };
+          console.log('No se pudo modificar el producto')
+        return product;
       }
 
 
     } catch (error) {
-      return {
-        status: "error",
-        message: "Error de servidor",
-      };
+      return error.error
     }
   };
   deleteProduct = async (pid) => {
     try {
       const prod = await this.getBy({ _id: pid });
       if (!prod) {
-        return { status: "error", message: "El producto no existe" };
-      }
+        console.log('El producto no existe')
       const user = await this.userModel.findOne({ _id: pid });
       if (user.rol === "admin") {
         const prodDelete = await prod.deleteOne({ _id: pid });
         if (!prodDelete)
-          return {
-            status: "error",
-            message: "El producto no se pudo eliminar",
-          };
-        return { status: "success", message: "Producto eliminado" };
+          console.log('El producto no se pudo eliminar')
+        return prod;
       }
       if (user._id === prod.owner) {
         const prodDelete = await prod.deleteOne({ _id: pid });
         if (!prodDelete)
-          return {
-            status: "error",
-            message: "El producto no se pudo eliminar",
-          };
+          console.log('El producto no se pudo eliminar')
       }
-      return { status: "success", message: "Usted no cuenta con suficientes permisos" };
-    } catch (error) {
-      return { status: "error", message: error };
+      console.log('Usted no tiene suficientes permisos')
+    } 
+  } catch (error) {
+    
+      return error.error
     }
   };
 }

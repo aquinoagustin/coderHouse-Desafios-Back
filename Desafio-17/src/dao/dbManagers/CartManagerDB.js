@@ -21,10 +21,7 @@ export class CartManagerDB {
             const carts = await this.modelCart.find().populate('products.product');
             return [carts]; 
         } catch (error) {
-            return({
-                status:"error",
-                message:cartsError.getAll
-            })
+            return error.error
         }
 
     }
@@ -35,10 +32,7 @@ export class CartManagerDB {
             let result = await this.modelCart.findOne(params);
             return result;
         } catch (error) {
-            return({
-                status:"error",
-                message:cartsError.getBy
-            })
+            return error.error
         }
 
     }
@@ -49,10 +43,7 @@ export class CartManagerDB {
             let result = await this.modelCart.create({});
             return result; 
         } catch (error) {
-            return({
-                status:"error",
-                message:cartsError.saveCart
-            })
+            return error.error
         }
 
     }
@@ -67,18 +58,14 @@ export class CartManagerDB {
             }
             const cart = await this.getBy({_id:cid});
             if (!cart){
-                return {
-                    status: "error",
-                    msg: `El carrito con el id ${cid} no existe`
-                } 
+                console.log('El carrito no existe')
+                return null;
             };
             
             const product = await productsDao.getBy({_id:pid});
             if (!product){
-                return {
-                    status: "error",
-                    msg: `El producto con el id ${pid} no existe`
-                } 
+                console.log('el producto no existe')
+                return null
             };
             
             const user = await usersDao.getAll();
@@ -101,13 +88,11 @@ export class CartManagerDB {
                 
                 return cart; 
             }
-            return ({status:'error',message:'No puede agregar al carrito productos propios'})
+            console.log('Error no se puede agregar productos propios al carrito')
+            return null
     
         } catch (error) {
-            return({
-                status:"error",
-                message:cartsError.addProductInCart
-            })
+            return error.error
         }
         
     
@@ -116,36 +101,27 @@ export class CartManagerDB {
         try {
             const cart = await this.getBy({_id:cid});
         if (!cart){
-            return {
-                status: "error",
-                msg: `El carrito con el id ${cid} no existe`
-            } 
+            console.log('El carrito no existe')
+            return null
         };
         const product = await productsDao.getBy({_id:pid});
         if (!product){
-            return {
-                status: "error",
-                msg: `El producto con el id ${pid} no existe`
-            } 
+            console.log('El producto no existe')
+            return null;
         };
         let productsInCart = cart.products;
         
         const indexProduct = productsInCart.findIndex((product)=> product.product == pid );
         if(indexProduct == -1){
-            return{
-                status:'error',
-                msg:`El producto con el id ${pid} no exíste en el carrito`
-            }
+            console.log('El producto no existe en el carrito')
+            return null
         }else{
             cart.products.splice(indexProduct)
         }
         await cart.save();
         return cart
         } catch (error) {
-            return({
-                status:"error",
-                message:cartsError.deleteProductCart
-            })
+            return error.error
         }
         
     }
@@ -154,19 +130,13 @@ export class CartManagerDB {
         try {
             const cart = await this.getBy({_id:cid});
             if (!cart){
-                return {
-                    status: "error",
-                    msg: `El carrito con el id ${cid} no existe`
-                } 
+                console.log('El carrito no existe')
             };
             cart.products.splice(cart.length)
             await cart.save();
             return cart    
         } catch (error) {
-            return({
-                status:"error",
-                message:cartsError.deleteProductCartAll
-            })
+            return error.error
         }
 
 
@@ -186,8 +156,7 @@ export class CartManagerDB {
       
           return cart;
         } catch (error) {
-          console.error(`Error al actualizar el carrito con ID ${cid}: ${error.message}`);
-          throw error;
+            return error.error
         }
       }
 
@@ -195,10 +164,7 @@ export class CartManagerDB {
         try {
             const cart = await this.getBy({_id:cid});
             if (!cart){
-                return {
-                    status: "error",
-                    msg: `El carrito con el id ${cid} no existe`
-                } 
+                console.log('El carrito no existe')
             };
             const product = await productsDao.getBy({_id:pid});
             if (!product){
@@ -209,27 +175,18 @@ export class CartManagerDB {
             };
             let productsInCart = cart.products;
             if(!quantity){
-                return {
-                    status: "error",
-                    msg: `La cantidad: ${quantity} no es valida `
-                } 
+                console.log('La cantidad no es valida')
             }
             const indexProduct = productsInCart.findIndex((product)=> product.product == pid );
             if(indexProduct == -1){
-                return{
-                    status:'error',
-                    msg:`El producto con el id ${pid} no exíste en el carrito`
-                }
+                console.log('El producto no existe en el carrito')
             }else{
                 cart.products[indexProduct].quantity = quantity;
             }
             await cart.save();
             return cart    
         } catch (error) {
-            return({
-                status:"error",
-                message:cartsError.editProductCartQuantity
-            })
+            return error.error
         }
         
     }
@@ -263,10 +220,7 @@ try {
     });
 
 } catch (error) {
-    return({
-        status:"error",
-        message:cartsError.emailTemplate
-    })
+    return error.error
 
 }
 
@@ -333,10 +287,7 @@ try {
 
             return ({ message: 'Hay productos sin suficiente stock', prodsSinStock });
         } catch (error) {
-            return({
-                status:"error",
-                message:cartsError.finalizePurchase
-            })
+            return error.error
         }
     }
 }
