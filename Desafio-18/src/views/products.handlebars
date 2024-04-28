@@ -1,0 +1,42 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+  </head>
+  <body>
+    <h1>Lista de Productos</h1>
+<div class="container-products">
+  <a href="/api/sessions/logout" id="btn-logout"><button>LogOut</button></a>
+    {{!-- Itera sobre los productos en el carrito y muestra la información --}}
+    {{#each products}}
+    <div class="product-card">
+        <h2>{{title}}</h2>
+        <img src="{{image}}" alt="{{this.title}}" class="product-image">
+        <p >{{description}}</p>
+        <p >Precio: ${{price}}</p>
+        <p >Stock: {{stock}}</p>
+       <form action="/api/carts/{{user.cart}}/products/{{this._id}}" method="post">
+    <input type="hidden" name="quantity" value="1">
+    <input type="submit" value="Agregar al Carrito">
+</form>
+</form>
+
+    
+    </div>
+    {{/each}} 
+</div>
+
+    {{#if products.hasPrevPage}}
+      <a href="{{products.prevLink}}">Página anterior</a>
+    {{/if}}
+
+    {{#if products.hasNextPage}}
+      <a href="{{products.nextLink}}">Página siguiente</a>
+    {{/if}}
+
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="/js/main.js"></script>
+  </body>
+  </html>
